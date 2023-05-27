@@ -2,10 +2,17 @@ name: Test with pytest and lint with flake8
 
 on:
   push:
-    branches: [ main ]
+    paths:
+      - '**.py'
+      - '**.html'
+      - '.github/workflows/*.yml'
+      - 'requirements.txt'
   pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+    paths:
+      - '**.py'
+      - '**.html'
+      - '.github/workflows/*.yml'
+      - 'requirements.txt'
 
 jobs:
   build:
