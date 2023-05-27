@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cover Letter Generator</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1, h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], textarea {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        pre {
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 16px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cover Letter Generator</h1>
+        <form id="cover-letter-form">
+            <label for="company_name">Company Name:</label>
+            <input type="text" id="company_name" name="company_name" required><br><br>
+            <label for="position">Position:</label>
+            <input type="text" id="position" name="position" required><br><br>
+            <label for="job_descript">Job Description:</label>
+            <textarea id="job_descript" name="job_descript" rows="10" cols="50" required></textarea><br><br>
+            <button type="submit">Generate Cover Letter</button>
+        </form>
+        <h2>Cover Letter:</h2>
+        <div class="loader" style="display: none;"></div>
+        <pre id="cover_letter"></pre>
+    </div>
+    <script>
+        $('#cover-letter-form').submit(function(e) {
+            e.preventDefault();
+            $('.loader').show(); // Show the loading animation
+            $.post('/generate_cover_letter', $(this).serialize(), function(data) {
+                $('#cover_letter').text(data.cover_letter);
+                $('.loader').hide(); // Hide the loading animation
+                // Store the input and output in the log
+                const index = $('#previous-requests option').length;
+                $('#previous-requests').append(`<option value="${index}">${companyName} - ${position}</option>`);
+                
+                // Store the input and output as data attributes for the option
+                const option = $('#previous-requests option[value="' + index + '"]');
+                option.data('companyName', companyName);
+                option.data('position', position);
+                option.data('jobDescription', jobDescription);
+                option.data('coverLetter', coverLetter);
+                
+                // Update the input boxes when a previous request is selected
+                $('#previous-requests').change(function() {
+                    const selectedOption = $('#previous-requests option:selected');
+                    $('#company_name').val(selectedOption.data('companyName'));
+                    $('#position').val(selectedOption.data('position'));
+                    $('#job_descript').val(selectedOption.data('jobDescription'));
+                    $('#cover_letter').text(selectedOption.data('coverLetter'));
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Files</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .dropzone {
+            background: #ffffff;
+            border-radius: 5px;
+            border: 2px dashed #0087F7;
+            border-image: none;
+            max-width: 500px;
+            margin-bottom: 15px;
+        }
+
+        #submit-all {
+            background: #0087F7;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            display: block;
+            margin: 15px auto;
+            cursor: pointer;
+        }
+
+        .info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .disabled-button {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h2>Upload Files</h2>
+        <p>Please upload your resume, cover letters, and any other info that will be helpful.</p>
+    </div>
+    <form action="/upload_resume" class="dropzone" id="resume-dropzone" method="post" enctype="multipart/form-data">
+        <div class="dz-message" data-dz-message><span>Drop or Upload Resume</span></div>
+    </form>
+    <form action="/upload_cover_letter" class="dropzone" id="cover-letter-dropzone" method="post" enctype="multipart/form-data">
+        <div class="dz-message" data-dz-message><span>Drop or Upload Cover Letter</span></div>
+    </form>
+    <form action="/upload_other" class="dropzone" id="other-dropzone" method="post" enctype="multipart/form-data">
+        <div class="dz-message" data-dz-message><span>Drop or Upload Other Files</span></div>
+    </form>
+    <a href="/job_details_page" id="submit-all" class="disabled-button">Next</a>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.js"></script>
+    <script>
+        Dropzone.autoDiscover = false;
+
+        var dropzoneOptions = {
+            autoProcessQueue: true,
+            uploadMultiple: false,
+            maxFilesize: 10, // MB
+            maxFiles: 10,
+            acceptedFiles: '.pdf,.docx,.txt',
+            addRemoveLinks: true,
+            init: function() {
+                var dropzone = this;
+                document.getElementById("submit-all").addEventListener("click", function() {
+                    dropzone.processQueue();
+                });
+                this.on("addedfile", function() {
+                    if (this.files[1]!=null){
+                        this.removeFile(this.files[0]);
+                    }
+                });
+            }
+        };
+
+        let resumeDropzone = new Dropzone("#resume-dropzone", dropzoneOptions);
+        let coverLetterDropzone = new Dropzone("#cover-letter-dropzone", dropzoneOptions);
+        let otherDropzone = new Dropzone("#other-dropzone", dropzoneOptions);
+
+        let allDropzones = [resumeDropzone, coverLetterDropzone];
+
+        // A function to check if a file has been successfully uploaded to the resume dropzone
+        function resumeFileUploaded() {
+            if (resumeDropzone.getQueuedFiles().length > 0 || resumeDropzone.getUploadingFiles().length > 0) {
+                return false;
+            }
+            return true;
+        }
+        // Initially disable the next button
+        document.getElementById("submit-all").classList.add("disabled-button");
+    
+        // Listen for the "success" event on the resume dropzone
+        resumeDropzone.on("success", function() {
+            if (resumeFileUploaded()) {
+                document.getElementById("submit-all").classList.remove("disabled-button");
+            }
+        });
+    </script>
+</body>
+
+</html>

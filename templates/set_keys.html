@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 18px;
+            color: #666;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Set Your API keys</h1>
+    <form action="/set_keys" method="post">
+        <label for="openai_api_key">OpenAI API Key:</label>
+        <input type="text" id="openai_api_key" name="openai_api_key" placeholder="Enter your OpenAI API Key" required><br>
+        <label for="google_cse_id">Google CSE ID:</label>
+        <input type="text" id="google_cse_id" name="google_cse_id" placeholder="Enter your Google CSE ID (Optional)"><br>
+        <label for="google_api_key">Google API Key:</label>
+        <input type="text" id="google_api_key" name="google_api_key" placeholder="Enter your Google API Key (Optional)"><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
