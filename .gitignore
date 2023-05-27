@@ -160,7 +160,7 @@ cython_debug/
 #.idea/
 
 secrets.ini
-Data/
+Data/*
 generated_cover_letters.txt
 vectorstore.pkl
 .DS_Store
