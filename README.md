@@ -52,6 +52,20 @@ You can upload your resumes and cover letters in PDF, TXT, or DOCX format. These
 
 You can generate a new cover letter by inputting the company name, job title, and job description into the appropriate fields.
 
+Sure, here's how you could add that to your README:
+
+---
+
+## Testing and Linting
+
+This repository uses a GitHub Actions workflow for automated testing and linting. With each push, this workflow runs the tests defined in the `tests` directory using `pytest`, and checks the code for styling issues with `flake8`. You can see the details of this workflow in `.github/workflows/main.yml`.
+
+You can also run the tests and linting locally before pushing to the repository. To run the tests and linting, open a terminal in the root directory of the project and execute the following command:
+
+```bash
+bash run_tests.sh
+```
+
 ## Future Updates
 
 Here are some planned enhancements for future updates:
