@@ -163,3 +163,4 @@ secrets.ini
 Data/
 generated_cover_letters.txt
 vectorstore.pkl
+.DS_Store

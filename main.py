@@ -10,7 +10,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Chroma, FAISS
 from langchain.text_splitter import CharacterTextSplitter
 import pickle
-from query_data import get_chain
+from src.query_data import get_chain
 from langchain.chains.summarize import load_summarize_chain
 
 import configparser
