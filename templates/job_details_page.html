@@ -72,14 +72,33 @@
             word-wrap: break-word;
         }
         .loader {
-    border: 8px solid #f3f3f3;
-    border-top: 8px solid #3498db;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 2s linear infinite;
-    margin: 0 auto;
-}
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+        }
+
+        .cover-letter-area {
+            position: relative;
+        }
+
+        #copy-btn {
+            background-color: #ffffff; /* Change to desired color */
+            color: #000000; /* Change to desired color */
+            border: 1px solid #cccccc; /* Change to desired color */
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .inline-component {
+            display: inline-block;
+        }
+
 
 @keyframes spin {
     0% { transform: rotate(0deg); }
@@ -101,29 +120,34 @@
             <textarea id="job_descript" name="job_descript" rows="10" cols="50" required></textarea><br><br>
             <button type="submit">Generate Cover Letter</button>
         </form>
-        <h2>Cover Letter:</h2>
-        <div class="loader" style="display: none;"></div>
-        <pre id="cover_letter"></pre>
+        <div class="cover-letter-area">
+            <h2>Cover Letter:</h2>
+            <div class="loader" style="display: none;"></div>
+            <button id="copy-btn" style="position: absolute; right: 10px; top: 10px;">Copy</button>
+            <pre id="cover_letter"></pre>
+        </div>
     </div>
     <script>
-            
         $('#cover-letter-form').submit(function(e) {
             e.preventDefault();
             $('.loader').show(); // Show the loading animation
+            // Clear the input fields
+            //$('#cover_letter').text('');
             $.post('/generate_cover_letter', $(this).serialize(), function(data) {
                 $('#cover_letter').text(data.cover_letter);
                 $('.loader').hide(); // Hide the loading animation
+    
                 // Store the input and output in the log
                 const index = $('#previous-requests option').length;
                 $('#previous-requests').append(`<option value="${index}">${companyName} - ${position}</option>`);
-                
+    
                 // Store the input and output as data attributes for the option
                 const option = $('#previous-requests option[value="' + index + '"]');
                 option.data('companyName', companyName);
                 option.data('position', position);
                 option.data('jobDescription', jobDescription);
                 option.data('coverLetter', coverLetter);
-                
+    
                 // Update the input boxes when a previous request is selected
                 $('#previous-requests').change(function() {
                     const selectedOption = $('#previous-requests option:selected');
@@ -135,5 +159,38 @@
             });
         });
     </script>
+    
+    <script>
+        document.querySelector("#copy-btn").addEventListener("click", function() {
+            // Create a new textarea element and give it id='t'
+            var copyText = document.createElement('textarea');
+            copyText.id = 't';
+            // Optional step to make less noise on the page, if any!
+            copyText.style.height = "0";
+            // Now append it to your page somewhere, I chose <body>
+            document.body.appendChild(copyText);
+            // Give our textarea a value of whatever inside the div of id='cover_letter'
+            copyText.value = document.getElementById('cover_letter').innerText;
+            // Now copy whatever inside the textarea to clipboard
+            var copy = document.getElementById('t');
+            copy.select();
+            document.execCommand('copy');
+            // Remove the textarea
+            document.body.removeChild(copyText);
+
+            // Add a checkmark next to the button
+            var checkmarkSpan = document.createElement('span');
+            checkmarkSpan.innerHTML = '✔️';
+            checkmarkSpan.className= 'inline-component'
+            document.getElementById("copy-btn").className = 'inline-component';  // Apply the new class to the button
+            document.getElementById("copy-btn").after(checkmarkSpan);
+            
+            // Remove the checkmark after a short delay
+            setTimeout(function() {
+                document.getElementById("copy-btn").nextSibling.remove();
+            }, 2000);
+        });
+    </script>
+
 </body>
 </html>
