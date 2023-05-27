@@ -31,13 +31,15 @@ def test_upload_page(client, move_vectorstore, cleanup_files):
 
     with patch('main.CoverLetterGenerator.load_documents') as mock_load_documents:
         mock_load_documents.return_value = None  # load_documents doesn't return anything
-        test_file_path = os.path.join(os.path.dirname(__file__), "data/test_resume.txt")
+        test_file_path = os.path.join(os.path.dirname(__file__), "test_data/test_resume.txt")
 
         with open(test_file_path, "rb") as f:
-            data = {"file": (f, "data/test_resume.txt")}
+            data = {"file": (f, "test_data/test_resume.txt")}
             response = client.post(
                 url_for("upload_resume"), content_type="multipart/form-data", data=data
             )
 
         # Check if the request was successful
         assert response.status_code == 200
+        # Check if load_documents was atleast called
+        mock_load_documents.assert_called()
