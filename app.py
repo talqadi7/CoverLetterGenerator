@@ -6,6 +6,10 @@ import logging
 import configparser
 from bs4 import BeautifulSoup
 import requests
+from datetime import datetime
+
+from main import CoverLetterGenerator
+cover_letter_generator = CoverLetterGenerator()  # initialize the cover letter generator
 
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
@@ -54,7 +58,7 @@ def generate_cover_letter():
 
     # Call your main function here, passing the company_name, position, and job_descript as arguments.
     # Replace 'your_main_function' with the actual name of your function.
-    cover_letter = main.query(company_name, position, job_descript)
+    cover_letter = cover_letter_generator.query(company_name, position, job_descript)
     save_cover_letter_to_file(cover_letter)
     return {'cover_letter': cover_letter}
 
@@ -126,6 +130,8 @@ def upload_resume():
             file_path = os.path.join('Data', resume_file_name)
             logging.info(f'Saving file to: {file_path}')  
             resume_file.save(file_path)
+            cover_letter_generator.load_documents()
+            
     return '', 200
 
 @app.route('/upload_cover_letter', methods=['POST'])
@@ -140,6 +146,7 @@ def upload_cover_letter():
             file_path = os.path.join('Data', cover_file_name)
             logging.info(f'Saving file to: {file_path}')  
             cover_letter_file.save(file_path)
+            cover_letter_generator.load_documents()
     return '', 200
 
 @app.route('/upload_other', methods=['POST'])
@@ -154,6 +161,7 @@ def upload_other():
             file_path = os.path.join('Data', other_file_name)
             logging.info(f'Saving file to: {file_path}')  
             other_file.save(file_path)
+            cover_letter_generator.load_documents()
     return '', 200
 
 def save_cover_letter_to_file(cover_letter):
