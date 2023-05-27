@@ -70,6 +70,8 @@ bash run_tests.sh
 
 Here are some planned enhancements for future updates:
 
+- **Integrate Streaming Responses:** I'm looking to include stream responses, to alleviate the total wait time for the prediction.
+
 - **Integration with Google SERPer:** I aim to connect the agent with the internet so as to leverage real-time data during the cover letter creation process. This could make the tool even more dynamic and relevant.
 
 - **Secure Key Storage:** Security is crucial when dealing with sensitive data such as API keys. I'm exploring more secure options for storing these keys instead of just saving them in statically in a file, to ensure that the application remains secure.
