@@ -1,12 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
-import main  # Replace 'your_main_module' with the name of the module containing your main function.
 import os
 from werkzeug.utils import secure_filename
 import logging
 import configparser
-from bs4 import BeautifulSoup
-import requests
-from datetime import datetime
 
 from main import CoverLetterGenerator
 cover_letter_generator = CoverLetterGenerator()  # initialize the cover letter generator
@@ -32,17 +28,17 @@ def job_details_page():
     # handler logic here
     return render_template('job_details_page.html')
 
-def get_job_details(url):
-    logging.info("Getting job details from: ", url)
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    logging.info('response.text: ', response.text)
-    logging.info('soup: ', soup)
-    position = soup.find('h1', {'class': 't-24 t-bold jobs-unified-top-card__job-title'}).text
-    company = soup.find('a', {'class': 'ember-view t-black t-normal'}).text
-    job_description = soup.find('div', class_='jobs-description-content__text').text
+# def get_job_details(url):
+#     logging.info("Getting job details from: ", url)
+#     response = requests.get(url)
+#     soup = BeautifulSoup(response.text, 'html.parser')
+#     logging.info('response.text: ', response.text)
+#     logging.info('soup: ', soup)
+#     position = soup.find('h1', {'class': 't-24 t-bold jobs-unified-top-card__job-title'}).text
+#     company = soup.find('a', {'class': 'ember-view t-black t-normal'}).text
+#     job_description = soup.find('div', class_='jobs-description-content__text').text
 
-    return company, position, job_description
+#     return company, position, job_description
 
 @app.route('/fetch_linkedin_data', methods=['POST'])
 def fetch_linkedin_data():
