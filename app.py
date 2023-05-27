@@ -10,14 +10,7 @@ cover_letter_generator = CoverLetterGenerator()  # initialize the cover letter g
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 
-# Location of the secrets file
 secrets_file = 'secrets.ini'
-# Check if the secrets file exists when the application starts. If not, create one
-if not os.path.isfile(secrets_file):
-    config = configparser.ConfigParser()
-    config['DEFAULT'] = {'OPENAI_API_KEY': '', 'GOOGLE_SEARCH_KEY': '', 'GOOGLE_CSE_ID': ''}
-    with open(secrets_file, 'w') as configfile:
-        config.write(configfile)
 
 @app.route('/')
 def index():
@@ -84,6 +77,14 @@ def are_keys_set():
 
 @app.route('/set_keys', methods=['GET', 'POST'])
 def set_keys():
+    # Location of the secrets file
+    # Check if the secrets file exists when the application starts. If not, create one
+    if not os.path.exists(secrets_file):
+        config = configparser.ConfigParser()
+        config['DEFAULT'] = {'OPENAI_API_KEY': '', 'GOOGLE_SEARCH_KEY': '', 'GOOGLE_CSE_ID': ''}
+        with open(secrets_file, 'w') as configfile:
+            config.write(configfile)
+    
     # If the secrets file already exists and the keys are set, redirect to upload page
     if are_keys_set():
         return redirect(url_for('upload_page'))

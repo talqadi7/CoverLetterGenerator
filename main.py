@@ -19,12 +19,17 @@ class CoverLetterGenerator:
         config = configparser.ConfigParser()
         config.read('secrets.ini')
 
-        os.environ["OPENAI_API_KEY"] = config['DEFAULT']['OPENAI_API_KEY']
+        if config.has_option('DEFAULT', 'OPENAI_API_KEY'):
+            os.environ["OPENAI_API_KEY"] = config['DEFAULT']['OPENAI_API_KEY']
+        else:
+            raise ValueError('OPENAI_API_KEY is not found in secrets.ini')
+
         os.environ["GOOGLE_CSE_ID"] = config['DEFAULT']['GOOGLE_CSE_ID']
         os.environ["GOOGLE_API_KEY"] = config['DEFAULT']['GOOGLE_API_KEY']
 
         self.text_splitter = CharacterTextSplitter()
         self.vectorstore = None
+    
     def load_documents(self):
             loaders = []
             data_dir = 'Data'
@@ -47,6 +52,11 @@ class CoverLetterGenerator:
             with open("vectorstore.pkl", "wb") as f:
                 pickle.dump(self.vectorstore, f)
 
+    def embeddings_exists(self):
+        """
+        Check if the embeddings file exists.
+        """
+        return os.path.exists('vectorstore.pkl')
 
     def query(self, company_name, position, job_descript):
         if os.path.exists("vectorstore.pkl"):
