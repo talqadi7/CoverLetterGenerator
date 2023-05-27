@@ -25,6 +25,7 @@ if not os.path.exists(secrets_file):
 
 cover_letter_generator = CoverLetterGenerator()  # initialize the cover letter generator
 
+
 @app.route("/")
 def index():
     return redirect(url_for("set_keys"))
@@ -96,7 +97,6 @@ def are_keys_set():
 @app.route("/set_keys", methods=["GET", "POST"])
 def set_keys():
     # Location of the secrets file
-    
 
     # If the secrets file already exists and the keys are set, redirect to upload page
     if are_keys_set():
