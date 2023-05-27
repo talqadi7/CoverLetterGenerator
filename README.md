@@ -52,6 +52,16 @@ You can upload your resumes and cover letters in PDF, TXT, or DOCX format. These
 
 You can generate a new cover letter by inputting the company name, job title, and job description into the appropriate fields.
 
+## Future Updates
+
+Here are some planned enhancements for future updates:
+
+- **Integration with Google SERPer:** I aim to connect the agent with the internet so as to leverage real-time data during the cover letter creation process. This could make the tool even more dynamic and relevant.
+
+- **Secure Key Storage:** Security is crucial when dealing with sensitive data such as API keys. I'm exploring more secure options for storing these keys instead of just saving them in statically in a file, to ensure that the application remains secure.
+
+- **Simplified Job Input:** To enhance user experience, I'm looking to eventually implement a feature where you only need to provide a link to a job posting. The application would then scrape necessary details such as company name, job title, and job description directly from the posting.
+
 ## Contact
 
 If you have any questions or feedback, please feel free to reach out or open an issue. Contributions are also welcome.
