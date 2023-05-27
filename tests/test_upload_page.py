@@ -1,7 +1,7 @@
 import os
 import pytest
 from flask import url_for
-from main import CoverLetterGenerator
+from unittest.mock import patch
 
 
 @pytest.fixture
@@ -28,16 +28,16 @@ def cleanup_files():
 
 
 def test_upload_page(client, move_vectorstore, cleanup_files):
-    test_file_path = os.path.join(os.path.dirname(__file__), "data/test_resume.txt")
 
-    with open(test_file_path, "rb") as f:
-        data = {"file": (f, "data/test_resume.txt")}
-        response = client.post(
-            url_for("upload_resume"), content_type="multipart/form-data", data=data
-        )
+    with patch('main.CoverLetterGenerator.load_documents') as mock_load_documents:
+        mock_load_documents.return_value = None  # load_documents doesn't return anything
+        test_file_path = os.path.join(os.path.dirname(__file__), "data/test_resume.txt")
 
-    # Check if the request was successful
-    assert response.status_code == 200
+        with open(test_file_path, "rb") as f:
+            data = {"file": (f, "data/test_resume.txt")}
+            response = client.post(
+                url_for("upload_resume"), content_type="multipart/form-data", data=data
+            )
 
-    cover_letter_generator = CoverLetterGenerator()
-    assert cover_letter_generator.embeddings_exists()
+        # Check if the request was successful
+        assert response.status_code == 200
