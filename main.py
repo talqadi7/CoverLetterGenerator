@@ -16,11 +16,6 @@ from langchain.chains.summarize import load_summarize_chain
 import configparser
 
 def query(company_name, position, job_descript):
-    #os.environ["OPENAI_API_KEY"] = "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"
-    #os.environ["GOOGLE_CSE_ID"] = "b15f0fa14a9e8496d"
-    #os.environ["GOOGLE_API_KEY"] = "AIzaSyDGoFvGiWxVLrJ3Rpcl2rES-J_Z6NXGETM"
-    
-        
     # Create a new ConfigParser object
     config = configparser.ConfigParser()
 
