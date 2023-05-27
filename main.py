@@ -53,24 +53,16 @@ def query(company_name, position, job_descript):
     with open("vectorstore.pkl", "rb") as f:
         vectorstore = pickle.load(f)
         qa_chain = get_chain(vectorstore)
-        chat_history = []
+        # chat_history = []
         print("Chat with your docs!")
-        query = f"I'm applying for the {position} at {company_name}. The job description is: {job_descript}"
+        query = f"{position} at {company_name}. The job description is: {job_descript}"
         print("Human: ", query)
-        #result = qa_chain({"question": query, "chat_history": chat_history})
-        result = qa_chain.generate_stream({"question": query, "chat_history": chat_history})
-        for token in result:
-            chat_history.append(token)
-            print("AI: ", token)
-        print("ASDFSAFASDF: ", result)
-        chat_history.append((result, result["answer"]))
-        print("AI:", result["answer"])
-        if result['answer'][-1] != '.':
-            print("Couldn't complete answer.")
-            #result2 = qa_chain({"question": 'please continue.', "chat_history": [result['answer']]})
-            #print(result2['answer'])
-            #result['answer'] += result2['answer']
-        return result["answer"]
+        result = qa_chain.run(query)
+
+        # chat_history.append((result, result["answer"]))
+        print("AI:", result)
+
+        return result
     
 if __name__ == "__main__":
     #main()
