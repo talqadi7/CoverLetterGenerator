@@ -143,9 +143,19 @@
             e.preventDefault();
             $('.loader').show(); // Show the loading animation
             // Clear the input fields
-            //$('#cover_letter').text('');
+            $('#cover_letter').text('');
+    
+            var source = new EventSource("/generate_cover_letter");
+            source.onmessage = function(event) {
+                // Append the token to the chatbox
+                var token = event.data;
+                var chatbox = document.getElementById('cover_letter');
+                chatbox.textContent += token;
+            };
+
             $.post('/generate_cover_letter', $(this).serialize(), function(data) {
-                $('#cover_letter').text(data.cover_letter);
+                // You might not need this anymore as data is streamed
+                // $('#cover_letter').text(data.cover_letter); 
                 $('.loader').hide(); // Hide the loading animation
     
                 // Store the input and output in the log
@@ -170,6 +180,7 @@
             });
         });
     </script>
+    
     
     <script>
         document.querySelector("#copy-btn").addEventListener("click", function() {

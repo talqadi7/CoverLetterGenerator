@@ -1,8 +1,18 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    Response,
+    stream_with_context,
+    jsonify,
+)
 import os
 from werkzeug.utils import secure_filename
 import logging
 import configparser
+from threading import Thread
 
 from main import CoverLetterGenerator
 
@@ -63,10 +73,30 @@ def generate_cover_letter():
     job_descript = request.form.get("job_descript")
 
     # Call your main function here, passing the company_name, position, and job_descript as arguments.
-    # Replace 'your_main_function' with the actual name of your function.
-    cover_letter = cover_letter_generator.query(company_name, position, job_descript)
-    save_cover_letter_to_file(cover_letter)
-    return {"cover_letter": cover_letter}
+    Thread(
+        target=cover_letter_generator.query, args=(company_name, position, job_descript)
+    ).start()
+
+    return {"status": "Generating cover letter..."}, 202
+    # cover_letter = cover_letter_generator.query(company_name, position, job_descript)
+    # save_cover_letter_to_file(cover_letter)
+    # return {"cover_letter": cover_letter}
+
+
+@app.route("/generate_cover_letter_final", methods=["GET"])
+def get_query_final():
+    final_response = cover_letter_generator.query_final()
+
+    return jsonify({"cover_letter": final_response})
+
+
+@app.route("/generate_cover_letter", methods=["GET"])
+def stream_generate_cover_letter():
+    def generate():
+        for message in cover_letter_generator.get_streamed_messages():
+            yield f"data: {message}\n\n"
+
+    return Response(stream_with_context(generate()), mimetype="text/event-stream")
 
 
 def update_secrets_in_file(

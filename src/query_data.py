@@ -21,8 +21,8 @@ QA_PROMPT = PromptTemplate(template=template, input_variables=["context", "quest
 
 
 def get_chain(vectorstore):
-    llm = ChatOpenAI(temperature=0.0)
-
+    # llm = ChatOpenAI(temperature=0.0)
+    llm = ChatOpenAI(streaming=True, temperature=0.0)
     chain_type_kwargs = {"prompt": QA_PROMPT}
     qa_chain = RetrievalQA.from_chain_type(
         llm=llm,
