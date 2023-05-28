@@ -6,7 +6,7 @@ template = """You're a cover letter writer expert.
 
 You are given a company name, position, job description, and resume information.
 
-Please follow the following steps at all times:
+Please follow the following instructions at all times:
 1. DON'T make up any information or an answer.
 2. Any information should be coming directly from my resume or my cover letters.
 3. You don't have to tackle every point in the job description.
