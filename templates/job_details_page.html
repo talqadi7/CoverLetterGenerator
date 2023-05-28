@@ -147,14 +147,29 @@
     
             var source = new EventSource("/generate_cover_letter");
             source.onmessage = function(event) {
-                // Append the token to the chatbox
                 var token = event.data;
-                var chatbox = document.getElementById('cover_letter');
-                chatbox.textContent += token;
+                if (token === 'END') {
+                    $('.loader').show();
+                    console.log("WE'RE END BRO");
+                    source.close();
+            
+                    // Fetch the final text
+                    $.get('/get_final_cover_letter', function(data) {
+                            setTimeout(function() {
+                                // Replace the content of the chatbox with the final text
+                                $('#cover_letter').text(data.cover_letter);
+                                $('.loader').hide(); // Hide the loader
+                                $('#cover_letter').show(); // Show the chatbox
+                            }, 1000); // Wait for 1 second
+                        });
+                } else {
+                    var chatbox = document.getElementById('cover_letter');
+                    chatbox.textContent += token;
+                }
             };
 
             $.post('/generate_cover_letter', $(this).serialize(), function(data) {
-                // You might not need this anymore as data is streamed
+                // might not need this anymore as data is streamed
                 // $('#cover_letter').text(data.cover_letter); 
                 $('.loader').hide(); // Hide the loading animation
     

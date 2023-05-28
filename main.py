@@ -91,6 +91,7 @@ class CoverLetterGenerator:
 
             self.cover_letter = result
             print("AI: ", self.cover_letter)
+            self.message_queue.put("END")
             return result
 
     def query_final(self):
@@ -100,6 +101,10 @@ class CoverLetterGenerator:
         while True:
             msg = self.message_queue.get()
             yield msg
+            if msg == "END":
+                print("I found the END.")
+                break
+
 
     if __name__ == "__main__":
         # main()

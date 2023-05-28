@@ -47,25 +47,6 @@ def job_details_page():
     return render_template("job_details_page.html")
 
 
-# def get_job_details(url):
-#     logging.info("Getting job details from: ", url)
-#     response = requests.get(url)
-#     soup = BeautifulSoup(response.text, 'html.parser')
-#     logging.info('response.text: ', response.text)
-#     logging.info('soup: ', soup)
-#     position = soup.find('h1', {'class': 't-24 t-bold jobs-unified-top-card__job-title'}).text
-#     company = soup.find('a', {'class': 'ember-view t-black t-normal'}).text
-#     job_description = soup.find('div', class_='jobs-description-content__text').text
-
-#     return company, position, job_description
-
-# @app.route('/fetch_linkedin_data', methods=['POST'])
-# def fetch_linkedin_data():
-#     url = request.form.get('url')
-#     company, position, description = get_job_details(url)
-#     return jsonify({'company': company, 'position': position, 'description': description})
-
-
 @app.route("/generate_cover_letter", methods=["POST"])
 def generate_cover_letter():
     company_name = request.form.get("company_name")
@@ -83,11 +64,9 @@ def generate_cover_letter():
     # return {"cover_letter": cover_letter}
 
 
-@app.route("/generate_cover_letter_final", methods=["GET"])
-def get_query_final():
-    final_response = cover_letter_generator.query_final()
-
-    return jsonify({"cover_letter": final_response})
+@app.route('/get_final_cover_letter', methods=['GET'])
+def get_final_cover_letter():
+    return jsonify({"cover_letter": cover_letter_generator.query_final()})
 
 
 @app.route("/generate_cover_letter", methods=["GET"])
