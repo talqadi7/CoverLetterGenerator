@@ -1,5 +1,5 @@
 from langchain.prompts.prompt import PromptTemplate
-from langchain.chat_models import ChatOpenAI
+from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 
 template = """You're a cover letter writer expert.
@@ -11,6 +11,7 @@ Please follow the following instructions at all times:
 2. Any information should be coming directly from my resume or my cover letters.
 3. You don't have to tackle every point in the job description.
 4. Focus on my most recent experience.
+5. If a skill is not listed in my resume or cover letter, then I don't have experience in it.
 
 Write me professional and targeted cover letter for a {question}.
 =========
@@ -21,8 +22,9 @@ QA_PROMPT = PromptTemplate(template=template, input_variables=["context", "quest
 
 
 def get_chain(vectorstore):
-    # llm = ChatOpenAI(temperature=0.0)
-    llm = ChatOpenAI(streaming=True, temperature=0.0)
+    llm = OpenAI(
+        streaming=True, temperature=0.0, max_tokens=600, model_name="text-davinci-003"
+    )
     chain_type_kwargs = {"prompt": QA_PROMPT}
     qa_chain = RetrievalQA.from_chain_type(
         llm=llm,
