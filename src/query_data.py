@@ -6,7 +6,7 @@ template = """You're a cover letter writer expert.
 
 You are given a company name, position, job description, and resume information.
 
-Please follow the following steps at all times:
+Please follow the following instructions at all times:
 1. DON'T make up any information or an answer.
 2. Any information should be coming directly from my resume or my cover letters.
 3. You don't have to tackle every point in the job description.
@@ -21,8 +21,8 @@ QA_PROMPT = PromptTemplate(template=template, input_variables=["context", "quest
 
 
 def get_chain(vectorstore):
-    llm = ChatOpenAI(temperature=0.0)
-
+    # llm = ChatOpenAI(temperature=0.0)
+    llm = ChatOpenAI(streaming=True, temperature=0.0)
     chain_type_kwargs = {"prompt": QA_PROMPT}
     qa_chain = RetrievalQA.from_chain_type(
         llm=llm,

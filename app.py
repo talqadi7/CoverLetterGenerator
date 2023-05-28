@@ -1,8 +1,18 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    Response,
+    stream_with_context,
+    jsonify,
+)
 import os
 from werkzeug.utils import secure_filename
 import logging
 import configparser
+from threading import Thread
 
 from main import CoverLetterGenerator
 
@@ -37,25 +47,6 @@ def job_details_page():
     return render_template("job_details_page.html")
 
 
-# def get_job_details(url):
-#     logging.info("Getting job details from: ", url)
-#     response = requests.get(url)
-#     soup = BeautifulSoup(response.text, 'html.parser')
-#     logging.info('response.text: ', response.text)
-#     logging.info('soup: ', soup)
-#     position = soup.find('h1', {'class': 't-24 t-bold jobs-unified-top-card__job-title'}).text
-#     company = soup.find('a', {'class': 'ember-view t-black t-normal'}).text
-#     job_description = soup.find('div', class_='jobs-description-content__text').text
-
-#     return company, position, job_description
-
-# @app.route('/fetch_linkedin_data', methods=['POST'])
-# def fetch_linkedin_data():
-#     url = request.form.get('url')
-#     company, position, description = get_job_details(url)
-#     return jsonify({'company': company, 'position': position, 'description': description})
-
-
 @app.route("/generate_cover_letter", methods=["POST"])
 def generate_cover_letter():
     company_name = request.form.get("company_name")
@@ -63,10 +54,28 @@ def generate_cover_letter():
     job_descript = request.form.get("job_descript")
 
     # Call your main function here, passing the company_name, position, and job_descript as arguments.
-    # Replace 'your_main_function' with the actual name of your function.
-    cover_letter = cover_letter_generator.query(company_name, position, job_descript)
-    save_cover_letter_to_file(cover_letter)
-    return {"cover_letter": cover_letter}
+    Thread(
+        target=cover_letter_generator.query, args=(company_name, position, job_descript)
+    ).start()
+
+    return {"status": "Generating cover letter..."}, 202
+    # cover_letter = cover_letter_generator.query(company_name, position, job_descript)
+    # save_cover_letter_to_file(cover_letter)
+    # return {"cover_letter": cover_letter}
+
+
+@app.route('/get_final_cover_letter', methods=['GET'])
+def get_final_cover_letter():
+    return jsonify({"cover_letter": cover_letter_generator.query_final()})
+
+
+@app.route("/generate_cover_letter", methods=["GET"])
+def stream_generate_cover_letter():
+    def generate():
+        for message in cover_letter_generator.get_streamed_messages():
+            yield f"data: {message}\n\n"
+
+    return Response(stream_with_context(generate()), mimetype="text/event-stream")
 
 
 def update_secrets_in_file(
