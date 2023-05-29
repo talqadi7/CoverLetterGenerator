@@ -52,8 +52,6 @@ You can upload your resumes and cover letters in PDF, TXT, or DOCX format. These
 
 You can generate a new cover letter by inputting the company name, job title, and job description into the appropriate fields.
 
-Sure, here's how you could add that to your README:
-
 ---
 
 ## Testing and Linting
