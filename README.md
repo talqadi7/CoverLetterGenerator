@@ -1,6 +1,6 @@
 # Automated Cover Letter Generator 
 
-This repository contains an Automated Cover Letter Generator, a tool that I've created for my portfolio to aid my job search. The generator is built with Python, utilizing the Flask web framework, LangChain, and OpenAI. It allows you to input a company name, job title, and job description, and then generates a professional, targeted cover letter that uses your resume (required), sample of cover letter (optional), and any other information.
+This project produces personalized cover letters based on the input of company name, job position, and job description. Leveraging a unique combination of document loaders, embeddings, and streaming server-sent events, it delivers a real-time, user-friendly experience while maintaining precise formatting and high-quality content. The generator is built with Python, utilizing the Flask web framework, LangChain, and OpenAI. It allows you to input a company name, job title, and job description, and then generates a professional, targeted cover letter that uses your resume (required), sample of cover letter (optional), and any other information.
 
 ## Features
 - Web-based UI for user-friendly experience.
