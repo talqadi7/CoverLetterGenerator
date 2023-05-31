@@ -2,29 +2,28 @@ from langchain.prompts.prompt import PromptTemplate
 from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 
-template = """You're a cover letter writer expert.
+template = """You're a cover letter writer expert. Use the details and instructions below to write me a professional and targeted cover letter.
 
-You are given a company name, position, job description, and resume information.
+Details:
+Job position, company name, and job description: {question}
+My resume information and/or sample cover letter: {context}
 
-Please follow the following instructions at all times:
-1. FOCUS ON THE JOB DESCRIPTION!
-2. DON'T make up any information or an answer.
-3. Any information should be coming directly from my resume or my cover letters.
-4. You don't have to tackle every point in the job description.
-5. Focus on my most recent experience.
-6. If a skill is not listed in my resume or cover letter, then I don't have experience in it.
+Instructions:
+1. FOCUS ON THE JOB DESCRIPTION! But you don't have to address every point in the job description.
+2. Figure out what skills that job requires, and match it with the provided information.
+3. Use the details provided as a guide, but DO NOT COPY DIRECTLY. Paraphrase and present the information in a unique and original manner.
+4. DON'T make up any information or an answer.
+5. You don't have to address every point in the job description.
+6. If possible, focus on my most recent experience
+7. If a skill is not listed in the provided information, then I don't have experience in it.
 
-Focusing on the job description: write me professional and targeted cover letter for a {question}.
-=========
-{context}
-=========
 Cover Letter:"""
 QA_PROMPT = PromptTemplate(template=template, input_variables=["context", "question"])
 
 
 def get_chain(vectorstore):
     llm = OpenAI(
-        streaming=True, temperature=0.05, max_tokens=600, model_name="text-davinci-003"
+        streaming=True, temperature=0.25, max_tokens=600, model_name="text-davinci-003"
     )
     chain_type_kwargs = {"prompt": QA_PROMPT}
     qa_chain = RetrievalQA.from_chain_type(
