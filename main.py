@@ -3,7 +3,7 @@ from langchain.document_loaders import TextLoader
 from langchain.document_loaders import PyPDFLoader
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
-from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import NLTKTextSplitter
 import pickle
 from src.query_data import get_chain
 import configparser
@@ -38,7 +38,7 @@ class CoverLetterGenerator:
         os.environ["GOOGLE_CSE_ID"] = config["DEFAULT"]["GOOGLE_CSE_ID"]
         os.environ["GOOGLE_API_KEY"] = config["DEFAULT"]["GOOGLE_API_KEY"]
 
-        self.text_splitter = CharacterTextSplitter()
+        self.text_splitter = NLTKTextSplitter()
         self.vectorstore = None
 
     def load_documents(self):
@@ -50,8 +50,10 @@ class CoverLetterGenerator:
             _, file_extension = os.path.splitext(file_path)
 
             if file_extension.lower() == ".txt":
+                print(f"Appending {file_path} to loaders")
                 loaders.append(TextLoader(file_path))
             elif file_extension.lower() == ".pdf":
+                print(f"Appending {file_path} to loaders")
                 loaders.append(PyPDFLoader(file_path))
         docs = []
         for loader in loaders:
@@ -81,7 +83,7 @@ class CoverLetterGenerator:
             # chat_history = []
             print("Chat with your docs!")
             query = (
-                f"{position} at {company_name}. The job description is: {job_descript}"
+                f"{position}, {company_name}, Job Description: \n {job_descript}"
             )
             print("Human: ", query)
 
@@ -104,7 +106,6 @@ class CoverLetterGenerator:
             if msg == "END":
                 print("I found the END.")
                 break
-
 
     if __name__ == "__main__":
         # main()
