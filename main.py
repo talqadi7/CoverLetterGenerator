@@ -10,6 +10,7 @@ import configparser
 import queue
 from langchain.callbacks.base import BaseCallbackHandler
 import threading
+import datetime
 
 
 class QueueCallbackHandler(BaseCallbackHandler):
@@ -26,6 +27,7 @@ class CoverLetterGenerator:
     def __init__(self):
         self.message_queue = queue.Queue()
         self.cover_letter = ""
+        self.company_name = ""
         config = configparser.ConfigParser()
         config.read("secrets.ini")
         self.lock = threading.Lock()
@@ -72,6 +74,7 @@ class CoverLetterGenerator:
         return os.path.exists("vectorstore.pkl")
 
     def query(self, company_name, position, job_descript):
+        self.company_name = company_name
         with self.lock:
             if os.path.exists("vectorstore.pkl"):
                 with open("vectorstore.pkl", "rb") as f:
@@ -83,7 +86,7 @@ class CoverLetterGenerator:
             # chat_history = []
             print("Chat with your docs!")
             query = (
-                f"{position}, {company_name}, Job Description: \n {job_descript}"
+                f"Date: {datetime.date.today().strftime('%Y-%m-%d')}, {position}, {company_name}, Job Description: \n {job_descript}"
             )
             print("Human: ", query)
 
