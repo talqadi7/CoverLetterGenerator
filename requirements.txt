@@ -7,5 +7,4 @@ nltk
 PDFDocument
 pypdf
 tiktoken
-faiss
 bs4
