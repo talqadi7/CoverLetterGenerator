@@ -5,144 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cover Letter Generator</title>
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            width: 100%;
-        }
-
-        h1, h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"], textarea {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px 2px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
         pre {
-            background-color: #f8f8f8;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 15px;
-            font-size: 16px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+            white-space: pre-wrap;       /* Since CSS 2.1 */
+            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
         }
-        .loader {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 2s linear infinite;
-            margin: 0 auto;
-        }
-
-        .cover-letter-area {
-            position: relative;
-        }
-
-        #copy-btn {
-            background-color: #ffffff; /* Change to desired color */
-            color: #000000; /* Change to desired color */
-            border: 1px solid #cccccc; /* Change to desired color */
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .inline-component {
-            display: inline-block;
-        }
-
-        nav {
-            position: absolute;
-            left: 0;
-            top: 0;
-            padding: 10px;
-        }
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-
     </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="{{ url_for('upload_page')}}">Upload More Files</a>
-        </nav>
-    </header>
-    <div class="container">
-        <h1>Cover Letter Generator</h1>
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('upload_page')}}">Upload More Files</a>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="mb-4">Cover Letter Generator</h1>
         <form id="cover-letter-form">
-            <label for="linkedin_url">LinkedIn URL:</label><br>
-            <input type="text" id="linkedin_url" name="linkedin_url"><br>
-            <button type="button" id="scrape_linkedin">Scrape LinkedIn</button><br>
-            <label for="company_name">Company Name:</label>
-            <input type="text" id="company_name" name="company_name" required><br><br>
-            <label for="position">Position:</label>
-            <input type="text" id="position" name="position" required><br><br>
-            <label for="job_descript">Job Description:</label>
-            <textarea id="job_descript" name="job_descript" rows="10" cols="50" required></textarea><br><br>
-            <button type="submit">Generate Cover Letter</button>
-            <a href="/download" id="download-button" class="button" style="display: none;">Download Cover Letter</a>
-
+            <div class="form-group">
+                <label for="linkedin_url">LinkedIn URL:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="linkedin_url" name="linkedin_url">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-secondary" id="scrape_linkedin">Scrape LinkedIn</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="company_name">Company Name:</label>
+                <input type="text" class="form-control" id="company_name" name="company_name" required>
+            </div>
+            <div class="form-group">
+                <label for="position">Position:</label>
+                <input type="text" class="form-control" id="position" name="position" required>
+            </div>
+            <div class="form-group">
+                <label for="job_descript">Job Description:</label>
+                <textarea class="form-control" id="job_descript" name="job_descript" rows="5" required></textarea>
+            </div>
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary mr-2">Generate Cover Letter</button>
+                <a href="/download" id="download-button" class="btn btn-success mt-2" style="display: none;">Download Cover Letter</a>
+            </div>
         </form>
-        <div class="cover-letter-area">
+        <div class="mt-5">
             <h2>Cover Letter:</h2>
-            <div class="loader" style="display: none;"></div>
-            <button id="copy-btn" style="position: absolute; right: 10px; top: 10px;">Copy</button>
-            <pre id="cover_letter"></pre>
+            <div class="spinner-border text-primary" role="status" style="display: none;">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <button id="copy-btn" class="btn btn-outline-secondary">Copy</button>
+            <pre id="cover_letter" class="border p-3 mt-2"></pre>
         </div>
     </div>
+    <!-- Your existing JavaScript code goes here -->
     <script>
         $('#scrape_linkedin').click(function() {
             var linkedin_url = $('#linkedin_url').val();
@@ -155,7 +74,7 @@
 
         $('#cover-letter-form').submit(function(e) {
             e.preventDefault();
-            $('.loader').show(); // Show the loading animation
+            $('.spinner-border').show(); // Show the loading animation
             // Clear the input fields
             $('#cover_letter').text('');
     
@@ -163,7 +82,7 @@
             source.onmessage = function(event) {
                 var token = event.data;
                 if (token === 'END') {
-                    $('.loader').show();
+                    $('.spinner-border').show();
                     console.log("WE'RE END BRO");
                     source.close();
             
@@ -172,7 +91,7 @@
                             setTimeout(function() {
                                 // Replace the content of the chatbox with the final text
                                 $('#cover_letter').text(data.cover_letter);
-                                $('.loader').hide(); // Hide the loader
+                                $('.spinner-border').hide(); // Hide the loader
                                 $('#cover_letter').show(); // Show the chatbox
                                 $('#download-button').show(); // Show the download button
                             }, 1000); // Wait for 1 second
@@ -186,7 +105,7 @@
             $.post('/generate_cover_letter', $(this).serialize(), function(data) {
                 // might not need this anymore as data is streamed
                 // $('#cover_letter').text(data.cover_letter); 
-                $('.loader').hide(); // Hide the loading animation
+                $('.spinner-border').hide(); // Hide the loading animation
     
                 // Store the input and output in the log
                 const index = $('#previous-requests option').length;
