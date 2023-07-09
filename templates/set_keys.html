@@ -1,65 +1,113 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Your API keys</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            padding: 50px;
+            background-color: #f8f9fa;
         }
-
-        h1 {
-            color: #333;
+    
+        .navbar {
+            background-color: #343a40;
         }
-
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+    
+        .navbar-brand {
+            color: #f8f9fa;
         }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 18px;
-            color: #666;
+    
+        .card {
+            border-color: #6c757d;
         }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+    
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
         }
-
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
+    
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
         }
-
-        input[type="submit"]:hover {
-            background-color: #45a049;
+    
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
         }
     </style>
 </head>
 <body>
-    <h1>Set Your API keys</h1>
-    <form action="/set_keys" method="post">
-        <label for="openai_api_key">OpenAI API Key:</label>
-        <input type="text" id="openai_api_key" name="openai_api_key" placeholder="Enter your OpenAI API Key" required><br>
-        <label for="google_cse_id">Google CSE ID:</label>
-        <input type="text" id="google_cse_id" name="google_cse_id" placeholder="Enter your Google CSE ID (Optional)"><br>
-        <label for="google_api_key">Google API Key:</label>
-        <input type="text" id="google_api_key" name="google_api_key" placeholder="Enter your Google API Key (Optional)"><br>
-        <input type="submit" value="Submit">
-    </form>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-file-alt"></i> Cover Letter Generator
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Menu
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{{ url_for('set_keys')}}">Set API Keys</a>
+                        <a class="dropdown-item" href="{{ url_for('upload_page')}}">Upload More Files</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h1 class="display-4">Set Your API keys</h1>
+            <p class="lead">Please enter your API keys below</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <form action="/set_keys" method="post">
+                    <div class="form-group">
+                        <label for="openai_api_key"><i class="fab fa-openai"></i> OpenAI API Key:</label>
+                        <input type="text" class="form-control" id="openai_api_key" name="openai_api_key" placeholder="Enter your OpenAI API Key" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="google_cse_id"><i class="fab fa-google"></i> Google CSE ID:</label>
+                        <input type="text" class="form-control" id="google_cse_id" name="google_cse_id" placeholder="Enter your Google CSE ID (Optional)">
+                    </div>
+                    <div class="form-group">
+                        <label for="google_api_key"><i class="fab fa-google"></i> Google API Key:</label>
+                        <input type="text" class="form-control" id="google_api_key" name="google_api_key" placeholder="Enter your Google API Key (Optional)">
+                    </div>
+                    <div class="form-group d-flex justify-content-center align-items-center">
+                        <input type="submit" class="btn btn-primary" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-dark text-white">
+        <div class="container text-center">
+            <span>Connect with me on:</span>
+            <a href="https://github.com/talqadi7" target="_blank" class="text-white ml-2">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://linkedin.com/in/talqadi7" target="_blank" class="text-white ml-2">
+                <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="mailto:taq.alqadi@gmail.com" class="text-white ml-2">
+                <i class="fas fa-envelope"></i> Email
+            </a>
+        </div>
+    </footer>
+
 </body>
 </html>

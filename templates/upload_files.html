@@ -4,64 +4,123 @@
     <meta charset="UTF-8">
     <title>Upload Files</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            height: 100vh;
-            margin: 0;
+            background-color: #f8f9fa;
+        }
+    
+        .navbar {
+            background-color: #343a40;
+        }
+    
+        .navbar-brand {
+            color: #f8f9fa;
+        }
+    
+        .card {
+            border-color: #6c757d;
+        }
+    
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+    
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+    
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
         }
 
         .dropzone {
-            background: #ffffff;
-            border-radius: 5px;
+            min-height: 150px;
             border: 2px dashed #0087F7;
-            border-image: none;
-            max-width: 500px;
+            background: #f8f9fa;
             margin-bottom: 15px;
         }
 
         #submit-all {
-            background: #0087F7;
-            color: #ffffff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
             display: block;
-            margin: 15px auto;
-            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
         }
-
-        .info {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .disabled-button {
+        .btn-disabled {
             pointer-events: none;
             opacity: 0.6;
         }
+
     </style>
 </head>
 <body>
-    <div class="info">
-        <h2>Upload Files</h2>
-        <p>Please upload your resume, cover letters, and any other info that will be helpful.</p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-file-alt"></i> Cover Letter Generator
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Menu
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{{ url_for('set_keys')}}">Set API Keys</a>
+                        <a class="dropdown-item" href="{{ url_for('upload_page')}}">Upload More Files</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h1 class="display-4">Upload Files</h1>
+            <p class="lead">Please upload your resume, cover letters, and any other info that will be helpful.</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <form action="/upload_resume" class="dropzone" id="resume-dropzone" method="post" enctype="multipart/form-data">
+                    <div class="dz-message" data-dz-message><span>Drop or Upload Resume</span></div>
+                </form>
+                <form action="/upload_cover_letter" class="dropzone" id="cover-letter-dropzone" method="post" enctype="multipart/form-data">
+                    <div class="dz-message" data-dz-message><span>Drop or Upload Cover Letter</span></div>
+                </form>
+                <form action="/upload_other" class="dropzone" id="other-dropzone" method="post" enctype="multipart/form-data">
+                    <div class="dz-message" data-dz-message><span>Drop or Upload Other Files</span></div>
+                </form>
+                <a href="/job_details_page" id="submit-all" class="btn btn-primary btn-disabled">Next</a>
+
+            </div>
+        </div>
     </div>
-    <form action="/upload_resume" class="dropzone" id="resume-dropzone" method="post" enctype="multipart/form-data">
-        <div class="dz-message" data-dz-message><span>Drop or Upload Resume</span></div>
-    </form>
-    <form action="/upload_cover_letter" class="dropzone" id="cover-letter-dropzone" method="post" enctype="multipart/form-data">
-        <div class="dz-message" data-dz-message><span>Drop or Upload Cover Letter</span></div>
-    </form>
-    <form action="/upload_other" class="dropzone" id="other-dropzone" method="post" enctype="multipart/form-data">
-        <div class="dz-message" data-dz-message><span>Drop or Upload Other Files</span></div>
-    </form>
-    <a href="/job_details_page" id="submit-all" class="disabled-button">Next</a>
+    
+    <footer class="footer mt-auto py-3 bg-dark text-white">
+        <div class="container text-center">
+            <span>Connect with me on:</span>
+            <a href="https://github.com/talqadi7" target="_blank" class="text-white ml-2">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://linkedin.com/in/talqadi7" target="_blank" class="text-white ml-2">
+                <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="mailto:taq.alqadi@gmail.com" class="text-white ml-2">
+                <i class="fas fa-envelope"></i> Email
+            </a>
+        </div>
+    </footer>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.js"></script>
     <script>
         Dropzone.autoDiscover = false;
@@ -90,25 +149,20 @@
         let coverLetterDropzone = new Dropzone("#cover-letter-dropzone", dropzoneOptions);
         let otherDropzone = new Dropzone("#other-dropzone", dropzoneOptions);
 
-        let allDropzones = [resumeDropzone, coverLetterDropzone];
+        // Initially style the next button as disabled
+        document.getElementById("submit-all").classList.add("btn-disabled");
 
-        // A function to check if a file has been successfully uploaded to the resume dropzone
-        function resumeFileUploaded() {
-            if (resumeDropzone.getQueuedFiles().length > 0 || resumeDropzone.getUploadingFiles().length > 0) {
-                return false;
-            }
-            return true;
-        }
-        // Initially disable the next button
-        document.getElementById("submit-all").classList.add("disabled-button");
-    
-        // Listen for the "success" event on the resume dropzone
-        resumeDropzone.on("success", function() {
-            if (resumeFileUploaded()) {
-                document.getElementById("submit-all").classList.remove("disabled-button");
+        // Listen for the "complete" event on the resume dropzone
+        resumeDropzone.on("complete", function() {
+            if (resumeDropzone.files.length > 0 && resumeDropzone.getUploadingFiles().length === 0 && resumeDropzone.getQueuedFiles().length === 0) {
+                document.getElementById("submit-all").classList.remove("btn-disabled");
             }
         });
+
     </script>
+
+
+
 </body>
 
 </html>
