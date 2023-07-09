@@ -6,6 +6,7 @@
     <title>Cover Letter Generator</title>
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -18,50 +19,148 @@
             word-wrap: break-word;       /* Internet Explorer 5.5+ */
         }
     </style>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+    
+        .navbar {
+            background-color: #343a40;
+        }
+    
+        .navbar-brand {
+            color: #f8f9fa;
+        }
+    
+        .card {
+            border-color: #6c757d;
+        }
+    
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+    
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+    
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+    </style>
+
+    <style>
+        .btn-animate {
+            animation: btn-animation 1s infinite;
+        }
+
+        @keyframes btn-animation {
+            0% { background-color: #007bff; }
+            50% { background-color: #0056b3; }
+            100% { background-color: #007bff; }
+        }
+    </style>
+    
 </head>
 <body>
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('upload_page')}}">Upload More Files</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-file-alt"></i> Cover Letter Generator
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Menu
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{{ url_for('set_keys')}}">Set API Keys</a>
+                        <a class="dropdown-item" href="{{ url_for('upload_page')}}">Upload More Files</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </nav>
+    
     <div class="container mt-5">
-        <h1 class="mb-4">Cover Letter Generator</h1>
-        <form id="cover-letter-form">
-            <div class="form-group">
-                <label for="linkedin_url">LinkedIn URL:</label>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="linkedin_url" name="linkedin_url">
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-secondary" id="scrape_linkedin">Scrape LinkedIn</button>
+        <div class="text-center mb-4">
+            <h1 class="display-4">Cover Letter Generator</h1>
+            <p class="lead">Generate professional cover letters in seconds</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <form id="cover-letter-form">
+                    <div class="form-group">
+                        <label for="linkedin_url">LinkedIn URL:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="linkedin_url" name="linkedin_url">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-secondary" id="scrape_linkedin">Scrape LinkedIn</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="company_name">Company Name:</label>
+                        <input type="text" class="form-control" id="company_name" name="company_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="position">Position:</label>
+                        <input type="text" class="form-control" id="position" name="position" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="job_descript">Job Description:</label>
+                        <textarea class="form-control" id="job_descript" name="job_descript" rows="5" required></textarea>
+                    </div>
+                    <div class="form-group d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary mr-2">
+                            <i class="fas fa-magic"></i> Generate Cover Letter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="mt-5">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">Cover Letter:</h2>
+                    <div class="d-flex align-items-center">
+                        <button id="copy-btn" class="btn btn-outline-secondary mr-2">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <a href="/download" id="download-button" class="btn btn-success" style="display: none;">
+                            <i class="fas fa-download"></i> Download Cover Letter
+                        </a>
                     </div>
                 </div>
+                <div class="card-body">
+                    <div class="spinner-border text-primary" role="status" style="display: none;">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <pre id="cover_letter" class="border-0 p-3 mt-2"></pre>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="company_name">Company Name:</label>
-                <input type="text" class="form-control" id="company_name" name="company_name" required>
-            </div>
-            <div class="form-group">
-                <label for="position">Position:</label>
-                <input type="text" class="form-control" id="position" name="position" required>
-            </div>
-            <div class="form-group">
-                <label for="job_descript">Job Description:</label>
-                <textarea class="form-control" id="job_descript" name="job_descript" rows="5" required></textarea>
-            </div>
-            <div class="form-group text-center">
-                <button type="submit" class="btn btn-primary mr-2">Generate Cover Letter</button>
-                <a href="/download" id="download-button" class="btn btn-success mt-2" style="display: none;">Download Cover Letter</a>
-            </div>
-        </form>
-        <div class="mt-5">
-            <h2>Cover Letter:</h2>
-            <div class="spinner-border text-primary" role="status" style="display: none;">
-                <span class="sr-only">Loading...</span>
-              </div>
-              <button id="copy-btn" class="btn btn-outline-secondary">Copy</button>
-            <pre id="cover_letter" class="border p-3 mt-2"></pre>
         </div>
-    </div>
-    <!-- Your existing JavaScript code goes here -->
+        <footer class="footer mt-auto py-3 bg-dark text-white">
+            <div class="container text-center">
+                <span>Connect with me on:</span>
+                <a href="https://github.com/talqadi7" target="_blank" class="text-white ml-2">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://linkedin.com/in/talqadi7" target="_blank" class="text-white ml-2">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+                <a href="mailto:taq.alqadi@gmail.com" class="text-white ml-2">
+                    <i class="fas fa-envelope"></i> Email
+                </a>
+            </div>
+        </footer>
+        
     <script>
         $('#scrape_linkedin').click(function() {
             var linkedin_url = $('#linkedin_url').val();
@@ -160,6 +259,27 @@
             setTimeout(function() {
                 document.getElementById("copy-btn").nextSibling.remove();
             }, 2000);
+        });
+    </script>
+
+    <script>
+        $('#scrape_linkedin').click(function() {
+            $(this).addClass('btn-animate');
+            var linkedin_url = $('#linkedin_url').val();
+            $.post('/scrape_linkedin', {linkedin_url: linkedin_url}, function(data) {
+                $('#company_name').val(data.company_name);
+                $('#position').val(data.job_title);
+                $('#job_descript').val(data.job_description);
+                $('#scrape_linkedin').removeClass('btn-animate');
+            });
+        });
+
+        $('#cover-letter-form').submit(function(e) {
+            e.preventDefault();
+            $('#cover-letter-form button[type="submit"]').addClass('btn-animate');
+            $.post('/generate_cover_letter', $(this).serialize(), function(data) {
+                $('#cover-letter-form button[type="submit"]').removeClass('btn-animate');
+            });
         });
     </script>
 
