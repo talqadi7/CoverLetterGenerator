@@ -7,12 +7,14 @@ from flask import (
     Response,
     stream_with_context,
     jsonify,
+    send_file
 )
 import os
 from werkzeug.utils import secure_filename
 import logging
 import configparser
 from threading import Thread
+from pdfdocument.document import PDFDocument
 
 from main import CoverLetterGenerator
 
@@ -203,6 +205,34 @@ def save_cover_letter_to_file(cover_letter):
         f.write("==== New Cover Letter ====\n\n")
         f.write(cover_letter)
         f.write("\n\n")
+
+
+@app.route('/download', methods=['GET'])
+def download():
+    company_name = cover_letter_generator.company_name.replace(" ", "_")
+    txt_filename = f"generated_cover_letters/txt/{company_name}_cover_letter.txt"
+    pdf_filename = f"generated_cover_letters/pdf/{company_name}_cover_letter.pdf"
+
+    # Save the cover letter as a text file
+    with open(txt_filename, 'w') as file:
+        file.write(cover_letter_generator.cover_letter)
+
+    with open(txt_filename, 'r') as f:
+        text = f.read()
+
+    pdf = PDFDocument(pdf_filename)
+    pdf.init_report()
+    pdf.generate_style(font_size=12)
+    pdf.p(text)
+    pdf.generate()
+
+    # # Check if the PDF was created successfully
+    if not os.path.exists(pdf_filename):
+        return "Error: could not create PDF"
+
+    # Send the PDF file to the user
+    return send_file(pdf_filename, as_attachment=True)
+
 
 
 if __name__ == "__main__":

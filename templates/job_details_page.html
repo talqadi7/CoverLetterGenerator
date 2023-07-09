@@ -130,6 +130,8 @@
             <label for="job_descript">Job Description:</label>
             <textarea id="job_descript" name="job_descript" rows="10" cols="50" required></textarea><br><br>
             <button type="submit">Generate Cover Letter</button>
+            <a href="/download" id="download-button" class="button" style="display: none;">Download Cover Letter</a>
+
         </form>
         <div class="cover-letter-area">
             <h2>Cover Letter:</h2>
@@ -160,6 +162,7 @@
                                 $('#cover_letter').text(data.cover_letter);
                                 $('.loader').hide(); // Hide the loader
                                 $('#cover_letter').show(); // Show the chatbox
+                                $('#download-button').show(); // Show the download button
                             }, 1000); // Wait for 1 second
                         });
                 } else {
