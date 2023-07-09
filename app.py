@@ -15,6 +15,10 @@ import logging
 import configparser
 from threading import Thread
 from pdfdocument.document import PDFDocument
+import json
+import html
+import requests
+from bs4 import BeautifulSoup
 
 from main import CoverLetterGenerator
 
@@ -47,6 +51,62 @@ def index():
 def job_details_page():
     # handler logic here
     return render_template("job_details_page.html")
+
+def get_html_from_url(url):
+    response = requests.get(url)
+    response.raise_for_status()  # This will raise an exception if there's an error
+    return response.text
+
+def scrape_linkedin_job_posting(html_doc):
+    soup = BeautifulSoup(html_doc, 'html.parser')
+
+    # Extract job title from the 'og:title' meta tag
+    og_title = soup.find('meta', property='og:title')['content']
+
+    # Split the 'og:title' content by ' hiring '
+    split_title = og_title.split(' hiring ')
+
+    # The first part is the company name
+    company_name = split_title[0]
+
+    # The second part contains the job title and location, split it by ' in '
+    job_title_location = split_title[1].split(' in ')
+
+    # The first part is the job title
+    job_title = job_title_location[0]
+
+    # Extract job description from the 'JobPosting' schema
+    job_posting_schema = soup.find('script', type='application/ld+json')
+    job_posting_data = json.loads(job_posting_schema.string)
+    job_description_html = job_posting_data['description']
+
+    # Convert HTML to plain text
+    job_description_soup = BeautifulSoup(job_description_html, 'html.parser')
+    job_description = job_description_soup.get_text(separator='\n')
+
+    # Unescape HTML entities
+    job_description = html.unescape(job_description)
+
+    return job_title, company_name, job_description
+
+
+@app.route("/scrape_linkedin", methods=["POST"])
+def scrape_linkedin():
+    linkedin_url = request.form.get("linkedin_url")
+
+    # Get the HTML content of the LinkedIn job posting page
+    html_doc = get_html_from_url(linkedin_url)
+
+    # Scrape the job posting
+    job_title, company_name, job_description = scrape_linkedin_job_posting(html_doc)
+
+    # Return the scraped data as a JSON response
+    return {
+        "job_title": job_title,
+        "company_name": company_name,
+        "job_description": job_description
+    }
+
 
 
 @app.route("/generate_cover_letter", methods=["POST"])
@@ -222,7 +282,7 @@ def download():
 
     pdf = PDFDocument(pdf_filename)
     pdf.init_report()
-    pdf.generate_style(font_size=12)
+    pdf.generate_style(font_size=11, font_name='Times-Roman')
     pdf.p(text)
     pdf.generate()
 

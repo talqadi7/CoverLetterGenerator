@@ -123,6 +123,9 @@
     <div class="container">
         <h1>Cover Letter Generator</h1>
         <form id="cover-letter-form">
+            <label for="linkedin_url">LinkedIn URL:</label><br>
+            <input type="text" id="linkedin_url" name="linkedin_url"><br>
+            <button type="button" id="scrape_linkedin">Scrape LinkedIn</button><br>
             <label for="company_name">Company Name:</label>
             <input type="text" id="company_name" name="company_name" required><br><br>
             <label for="position">Position:</label>
@@ -141,6 +144,15 @@
         </div>
     </div>
     <script>
+        $('#scrape_linkedin').click(function() {
+            var linkedin_url = $('#linkedin_url').val();
+            $.post('/scrape_linkedin', {linkedin_url: linkedin_url}, function(data) {
+                $('#company_name').val(data.company_name);
+                $('#position').val(data.job_title);
+                $('#job_descript').val(data.job_description);
+            });
+        });
+
         $('#cover-letter-form').submit(function(e) {
             e.preventDefault();
             $('.loader').show(); // Show the loading animation

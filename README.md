@@ -74,7 +74,7 @@ Here are some planned enhancements for future updates:
 
 - **Secure Key Storage:** Security is crucial when dealing with sensitive data such as API keys. I'm exploring more secure options for storing these keys instead of just saving them in statically in a file, to ensure that the application remains secure.
 
-- **Simplified Job Input:** To enhance user experience, I'm looking to eventually implement a feature where you only need to provide a link to a job posting. The application would then scrape necessary details such as company name, job title, and job description directly from the posting.
+- ✅ **Simplified Job Input:** To enhance user experience, I'm looking to eventually implement a feature where you only need to provide a link to a job posting. The application would then scrape necessary details such as company name, job title, and job description directly from the posting.
 
 ## Contact
 

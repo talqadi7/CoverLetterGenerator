@@ -5,3 +5,7 @@ pytest
 pytest-flask
 nltk
 PDFDocument
+pypdf
+tiktoken
+faiss
+bs4
