@@ -4,6 +4,11 @@ from langchain.chains import RetrievalQA
 
 template = """You're a cover letter writer expert. Use the details and instructions below to write me a professional and tailored cover letter.
 
+
+My name: Talal Alqadi
+My address: San Diego, CA
+My email: taq.alqadi@gmail.com
+
 Details:
 Job position, company name, and job description: {question}
 Resume and Information: {context}
@@ -43,7 +48,7 @@ QA_PROMPT = PromptTemplate(template=template, input_variables=["context", "quest
 
 def get_chain(vectorstore):
     llm = OpenAI(
-        streaming=True, temperature=0.2, max_tokens=5000, model_name="gpt-4"
+        streaming=True, temperature=0.2, max_tokens=3000, model_name="gpt-4"
     )
     chain_type_kwargs = {"prompt": QA_PROMPT}
     qa_chain = RetrievalQA.from_chain_type(
