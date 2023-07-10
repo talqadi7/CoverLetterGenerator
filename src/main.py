@@ -11,7 +11,9 @@ import queue
 from langchain.callbacks.base import BaseCallbackHandler
 import threading
 import datetime
+import logging
 
+logging.basicConfig(level=logging.INFO)
 
 class QueueCallbackHandler(BaseCallbackHandler):
     def __init__(self, message_queue):
@@ -36,10 +38,10 @@ class CoverLetterGenerator:
             _, file_extension = os.path.splitext(file_path)
 
             if file_extension.lower() == ".txt":
-                print(f"Appending {file_path} to loaders")
+                logging.info(f"Appending {file_path} to loaders")
                 loaders.append(TextLoader(file_path))
             elif file_extension.lower() == ".pdf":
-                print(f"Appending {file_path} to loaders")
+                logging.info(f"Appending {file_path} to loaders")
                 loaders.append(PyPDFLoader(file_path))
         docs = []
         for loader in loaders:
@@ -72,18 +74,18 @@ class CoverLetterGenerator:
 
             qa_chain = get_chain(self.vectorstore)
             # chat_history = []
-            print("Chat with your docs!")
+            logging.info("Chat with your docs!")
             input_query = (
                 f"Date: {datetime.date.today().strftime('%Y-%m-%d')}, {position}, {company_name}, Job Description: \n {job_descript}"
             )
-            print("Human: ", input_query)
+            logging.info("Human: ", input_query)
 
             callback = QueueCallbackHandler(self.message_queue)
             # Use the custom handler to stream the response
             result = qa_chain.run(input_query, callbacks=[callback])
 
             self.cover_letter = result
-            print("AI: ", self.cover_letter)
+            logging.info("AI: ", self.cover_letter)
             self.message_queue.put("END")
             self.is_running = False
             return result
@@ -117,7 +119,7 @@ class CoverLetterGenerator:
             msg = self.message_queue.get()
             yield msg
             if msg == "END":
-                print("I found the END.")
+                logging.info("I found the END.")
                 self.message_queue = queue.Queue()
                 break
 

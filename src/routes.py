@@ -11,6 +11,7 @@ from flask import (
 from threading import Thread
 from src.services import *
 
+logging.basicConfig(level=logging.INFO)
 
 def register_routes(app, cover_letter_generator):
     @app.route("/")
@@ -46,7 +47,7 @@ def register_routes(app, cover_letter_generator):
         with cover_letter_generator.lock:
             if cover_letter_generator.is_running:
                 return {"status": "A cover letter generation is already in progress."}, 409
-        print("Generating cover letter.")
+        logging.info("Generating cover letter.")
         company_name = request.form.get("company_name")
         position = request.form.get("position")
         job_descript = request.form.get("job_descript")
