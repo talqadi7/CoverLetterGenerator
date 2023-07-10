@@ -101,6 +101,9 @@ class CoverLetterGenerator:
 
     def query_final(self):
         return self.cover_letter
+    
+    def reset(self):
+        self.cover_letter = ''
 
     def get_streamed_messages(self):
         while True:

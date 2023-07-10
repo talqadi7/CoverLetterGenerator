@@ -266,6 +266,7 @@
         $('#scrape_linkedin').click(function() {
             $(this).addClass('btn-animate');
             var linkedin_url = $('#linkedin_url').val();
+            $('#cover_letter').text(''); // Clear the text area
             $.post('/scrape_linkedin', {linkedin_url: linkedin_url}, function(data) {
                 $('#company_name').val(data.company_name);
                 $('#position').val(data.job_title);
@@ -276,6 +277,7 @@
 
         $('#cover-letter-form').submit(function(e) {
             e.preventDefault();
+            $('#cover_letter').text(''); // Clear the text area
             $('#cover-letter-form button[type="submit"]').addClass('btn-animate');
             $.post('/generate_cover_letter', $(this).serialize(), function(data) {
                 $('#cover-letter-form button[type="submit"]').removeClass('btn-animate');

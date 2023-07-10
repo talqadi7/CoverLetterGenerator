@@ -111,11 +111,12 @@ def scrape_linkedin():
 
 @app.route("/generate_cover_letter", methods=["POST"])
 def generate_cover_letter():
+    cover_letter_generator.reset()
+
     company_name = request.form.get("company_name")
     position = request.form.get("position")
     job_descript = request.form.get("job_descript")
 
-    # Call your main function here, passing the company_name, position, and job_descript as arguments.
     Thread(
         target=cover_letter_generator.query, args=(company_name, position, job_descript)
     ).start()
