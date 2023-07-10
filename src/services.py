@@ -49,7 +49,7 @@ def update_secrets_in_file(
     openai_api_key=None, google_api_key=None, google_cse_id=None
 ):
     config = configparser.ConfigParser()
-    config.read("secrets.ini")
+    config.read("../secrets.ini")
 
     if openai_api_key:
         config["DEFAULT"]["OPENAI_API_KEY"] = openai_api_key
