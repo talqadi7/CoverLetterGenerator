@@ -15,6 +15,13 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
+# Get the directory of the current script
+script_dir = os.path.dirname(os.path.realpath(__file__))
+
+# Build the path to the secrets file
+secrets_file = os.path.join(script_dir, "../secrets.ini")
+
+
 class QueueCallbackHandler(BaseCallbackHandler):
     def __init__(self, message_queue):
         self.message_queue = message_queue
@@ -61,9 +68,9 @@ class CoverLetterGenerator:
 
     def query(self, company_name, position, job_descript):
         with self.lock:
-                if self.is_running:
-                    return
-                self.is_running = True
+            if self.is_running:
+                return
+            self.is_running = True
         self.company_name = company_name
         with self.lock:
             if os.path.exists("vectorstore.pkl"):
@@ -75,9 +82,7 @@ class CoverLetterGenerator:
             qa_chain = get_chain(self.vectorstore)
             # chat_history = []
             logging.info("Chat with your docs!")
-            input_query = (
-                f"Date: {datetime.date.today().strftime('%Y-%m-%d')}, {position}, {company_name}, Job Description: \n {job_descript}"
-            )
+            input_query = f"Date: {datetime.date.today().strftime('%Y-%m-%d')}, {position}, {company_name}, Job Description: \n {job_descript}"
             logging.info("Human: ", input_query)
 
             callback = QueueCallbackHandler(self.message_queue)
@@ -93,13 +98,13 @@ class CoverLetterGenerator:
     def query_final(self):
         self.is_running = False
         return self.cover_letter
-    
+
     def reset(self):
         self.message_queue = queue.Queue()
         self.cover_letter = ""
         self.company_name = ""
         config = configparser.ConfigParser()
-        config.read("secrets.ini")
+        config.read(secrets_file)
         self.lock = threading.Lock()
         self.is_running = False
 
