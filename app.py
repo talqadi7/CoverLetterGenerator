@@ -111,8 +111,7 @@ def scrape_linkedin():
 
 @app.route("/generate_cover_letter", methods=["POST"])
 def generate_cover_letter():
-    cover_letter_generator.reset()
-
+    print("Generating cover letter.")
     company_name = request.form.get("company_name")
     position = request.form.get("position")
     job_descript = request.form.get("job_descript")
@@ -129,11 +128,13 @@ def generate_cover_letter():
 
 @app.route('/get_final_cover_letter', methods=['GET'])
 def get_final_cover_letter():
-    return jsonify({"cover_letter": cover_letter_generator.query_final()})
+    final_cover_letter = cover_letter_generator.query_final()
+    return jsonify({"cover_letter": final_cover_letter})
 
 
 @app.route("/generate_cover_letter", methods=["GET"])
 def stream_generate_cover_letter():
+    cover_letter_generator.reset()
     def generate():
         for message in cover_letter_generator.get_streamed_messages():
             yield f"data: {message}\n\n"
