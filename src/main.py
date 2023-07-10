@@ -25,24 +25,7 @@ class QueueCallbackHandler(BaseCallbackHandler):
 
 class CoverLetterGenerator:
     def __init__(self):
-        self.message_queue = queue.Queue()
-        self.cover_letter = ""
-        self.company_name = ""
-        config = configparser.ConfigParser()
-        config.read("secrets.ini")
-        self.lock = threading.Lock()
-        self.is_running = False
-
-        if config.has_option("DEFAULT", "OPENAI_API_KEY"):
-            os.environ["OPENAI_API_KEY"] = config["DEFAULT"]["OPENAI_API_KEY"]
-        else:
-            raise ValueError("OPENAI_API_KEY is not found in secrets.ini")
-
-        os.environ["GOOGLE_CSE_ID"] = config["DEFAULT"]["GOOGLE_CSE_ID"]
-        os.environ["GOOGLE_API_KEY"] = config["DEFAULT"]["GOOGLE_API_KEY"]
-
-        self.text_splitter = NLTKTextSplitter()
-        self.vectorstore = None
+        self.reset()
 
     def load_documents(self):
         loaders = []
@@ -110,7 +93,24 @@ class CoverLetterGenerator:
         return self.cover_letter
     
     def reset(self):
-        self.cover_letter = ''
+        self.message_queue = queue.Queue()
+        self.cover_letter = ""
+        self.company_name = ""
+        config = configparser.ConfigParser()
+        config.read("secrets.ini")
+        self.lock = threading.Lock()
+        self.is_running = False
+
+        if config.has_option("DEFAULT", "OPENAI_API_KEY"):
+            os.environ["OPENAI_API_KEY"] = config["DEFAULT"]["OPENAI_API_KEY"]
+        else:
+            raise ValueError("OPENAI_API_KEY is not found in secrets.ini")
+
+        os.environ["GOOGLE_CSE_ID"] = config["DEFAULT"]["GOOGLE_CSE_ID"]
+        os.environ["GOOGLE_API_KEY"] = config["DEFAULT"]["GOOGLE_API_KEY"]
+
+        self.text_splitter = NLTKTextSplitter()
+        self.vectorstore = None
 
     def get_streamed_messages(self):
         while True:
