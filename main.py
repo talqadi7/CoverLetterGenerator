@@ -31,6 +31,7 @@ class CoverLetterGenerator:
         config = configparser.ConfigParser()
         config.read("secrets.ini")
         self.lock = threading.Lock()
+        self.is_running = False
 
         if config.has_option("DEFAULT", "OPENAI_API_KEY"):
             os.environ["OPENAI_API_KEY"] = config["DEFAULT"]["OPENAI_API_KEY"]
@@ -74,6 +75,10 @@ class CoverLetterGenerator:
         return os.path.exists("vectorstore.pkl")
 
     def query(self, company_name, position, job_descript):
+        with self.lock:
+                if self.is_running:
+                    return
+                self.is_running = True
         self.company_name = company_name
         with self.lock:
             if os.path.exists("vectorstore.pkl"):
@@ -85,21 +90,23 @@ class CoverLetterGenerator:
             qa_chain = get_chain(self.vectorstore)
             # chat_history = []
             print("Chat with your docs!")
-            query = (
+            input_query = (
                 f"Date: {datetime.date.today().strftime('%Y-%m-%d')}, {position}, {company_name}, Job Description: \n {job_descript}"
             )
-            print("Human: ", query)
+            print("Human: ", input_query)
 
             callback = QueueCallbackHandler(self.message_queue)
             # Use the custom handler to stream the response
-            result = qa_chain.run(query, callbacks=[callback])
+            result = qa_chain.run(input_query, callbacks=[callback])
 
             self.cover_letter = result
             print("AI: ", self.cover_letter)
             self.message_queue.put("END")
+            self.is_running = False
             return result
 
     def query_final(self):
+        self.is_running = False
         return self.cover_letter
     
     def reset(self):
@@ -111,6 +118,7 @@ class CoverLetterGenerator:
             yield msg
             if msg == "END":
                 print("I found the END.")
+                self.message_queue = queue.Queue()
                 break
 
     if __name__ == "__main__":

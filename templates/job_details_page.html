@@ -163,11 +163,13 @@
         
     <script>
         $('#scrape_linkedin').click(function() {
+            $(this).addClass('btn-animate');
             var linkedin_url = $('#linkedin_url').val();
             $.post('/scrape_linkedin', {linkedin_url: linkedin_url}, function(data) {
                 $('#company_name').val(data.company_name);
                 $('#position').val(data.job_title);
                 $('#job_descript').val(data.job_description);
+                $('#scrape_linkedin').removeClass('btn-animate');
             });
         });
 
@@ -177,35 +179,33 @@
             // Clear the input fields
             $('#cover_letter').text('');
     
-            var source = new EventSource("/generate_cover_letter");
-            source.onmessage = function(event) {
-                var token = event.data;
-                if (token === 'END') {
-                    $('.spinner-border').show();
-                    console.log("WE'RE END BRO");
-                    source.close();
-            
-                    // Fetch the final text
-                    $.get('/get_final_cover_letter', function(data) {
-                            setTimeout(function() {
-                                // Replace the content of the chatbox with the final text
-                                $('#cover_letter').text(data.cover_letter);
-                                $('.spinner-border').hide(); // Hide the loader
-                                $('#cover_letter').show(); // Show the chatbox
-                                $('#download-button').show(); // Show the download button
-                            }, 1000); // Wait for 1 second
-                        });
-                } else {
-                    var chatbox = document.getElementById('cover_letter');
-                    chatbox.textContent += token;
-                }
-            };
-
             $.post('/generate_cover_letter', $(this).serialize(), function(data) {
                 // might not need this anymore as data is streamed
                 // $('#cover_letter').text(data.cover_letter); 
                 $('.spinner-border').hide(); // Hide the loading animation
-    
+                var source = new EventSource("/generate_cover_letter");
+                            source.onmessage = function(event) {
+                                var token = event.data;
+                                if (token === 'END') {
+                                    $('.spinner-border').show();
+                                    console.log("WE'RE END BRO");
+                                    source.close();
+                            
+                                    // Fetch the final text
+                                    $.get('/get_final_cover_letter', function(data) {
+                                            setTimeout(function() {
+                                                // Replace the content of the chatbox with the final text
+                                                $('#cover_letter').text(data.cover_letter);
+                                                $('.spinner-border').hide(); // Hide the loader
+                                                $('#cover_letter').show(); // Show the chatbox
+                                                $('#download-button').show(); // Show the download button
+                                            }, 1000); // Wait for 1 second
+                                        });
+                                } else {
+                                    var chatbox = document.getElementById('cover_letter');
+                                    chatbox.textContent += token;
+                                }
+                            };
                 // Store the input and output in the log
                 const index = $('#previous-requests option').length;
                 $('#previous-requests').append(`<option value="${index}">${companyName} - ${position}</option>`);
@@ -259,29 +259,6 @@
             setTimeout(function() {
                 document.getElementById("copy-btn").nextSibling.remove();
             }, 2000);
-        });
-    </script>
-
-    <script>
-        $('#scrape_linkedin').click(function() {
-            $(this).addClass('btn-animate');
-            var linkedin_url = $('#linkedin_url').val();
-            $('#cover_letter').text(''); // Clear the text area
-            $.post('/scrape_linkedin', {linkedin_url: linkedin_url}, function(data) {
-                $('#company_name').val(data.company_name);
-                $('#position').val(data.job_title);
-                $('#job_descript').val(data.job_description);
-                $('#scrape_linkedin').removeClass('btn-animate');
-            });
-        });
-
-        $('#cover-letter-form').submit(function(e) {
-            e.preventDefault();
-            $('#cover_letter').text(''); // Clear the text area
-            $('#cover-letter-form button[type="submit"]').addClass('btn-animate');
-            $.post('/generate_cover_letter', $(this).serialize(), function(data) {
-                $('#cover-letter-form button[type="submit"]').removeClass('btn-animate');
-            });
         });
     </script>
 

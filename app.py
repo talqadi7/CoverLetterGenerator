@@ -111,6 +111,9 @@ def scrape_linkedin():
 
 @app.route("/generate_cover_letter", methods=["POST"])
 def generate_cover_letter():
+    with cover_letter_generator.lock:
+        if cover_letter_generator.is_running:
+            return {"status": "A cover letter generation is already in progress."}, 409
     print("Generating cover letter.")
     company_name = request.form.get("company_name")
     position = request.form.get("position")
@@ -128,8 +131,13 @@ def generate_cover_letter():
 
 @app.route('/get_final_cover_letter', methods=['GET'])
 def get_final_cover_letter():
-    final_cover_letter = cover_letter_generator.query_final()
-    return jsonify({"cover_letter": final_cover_letter})
+    with cover_letter_generator.lock:
+        if cover_letter_generator.is_running:
+            return {"status": "A cover letter generation is in progress."}, 409
+    cover_letter_final = cover_letter_generator.query_final()
+    save_cover_letter_to_file(cover_letter_final)
+    
+    return jsonify({"cover_letter": cover_letter_final})
 
 
 @app.route("/generate_cover_letter", methods=["GET"])
@@ -261,12 +269,11 @@ def upload_other():
 
 
 def save_cover_letter_to_file(cover_letter):
-    file_path = "generated_cover_letters.txt"
-
-    with open(file_path, "a") as f:
-        f.write("==== New Cover Letter ====\n\n")
-        f.write(cover_letter)
-        f.write("\n\n")
+    company_name = cover_letter_generator.company_name.replace(" ", "_")
+    txt_filename = f"generated_cover_letters/txt/{company_name}_cover_letter.txt"
+    # Save the cover letter as a text file
+    with open(txt_filename, 'w') as file:
+        file.write(cover_letter)
 
 
 @app.route('/download', methods=['GET'])
@@ -275,10 +282,7 @@ def download():
     txt_filename = f"generated_cover_letters/txt/{company_name}_cover_letter.txt"
     pdf_filename = f"generated_cover_letters/pdf/{company_name}_cover_letter.pdf"
 
-    # Save the cover letter as a text file
-    with open(txt_filename, 'w') as file:
-        file.write(cover_letter_generator.cover_letter)
-
+    # Open the cover letter text file
     with open(txt_filename, 'r') as f:
         text = f.read()
 
@@ -291,7 +295,7 @@ def download():
     # # Check if the PDF was created successfully
     if not os.path.exists(pdf_filename):
         return "Error: could not create PDF"
-
+    cover_letter_generator = CoverLetterGenerator()  # re-initialize the cover letter generator
     # Send the PDF file to the user
     return send_file(pdf_filename, as_attachment=True)
 
