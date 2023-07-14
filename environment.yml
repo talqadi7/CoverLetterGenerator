@@ -1,0 +1,21 @@
+name: coverletter
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - matplotlib
+  - pandas
+  - scipy
+  - langchain==0.0.181
+  - flask==2.2.3
+  - openai==0.27.4
+  - pytest
+  - pytest-flask
+  - nltk
+  - pypdf
+  - tiktoken
+  - bs4
+  - faiss
+  - pip
+  - pip:
+    - PDFDocument
