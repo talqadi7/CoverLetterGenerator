@@ -189,7 +189,7 @@ def save_cover_letter_to_file(cover_letter, company_name):
     logging.info(f"Saving cover letter to {txt_filename}")
     
     # Save the cover letter as a text file
-    with open(txt_filename, "w") as file:
+    with open(txt_filename, "w", encoding='utf-8') as file:
         file.write(cover_letter)
     
     return txt_filename
