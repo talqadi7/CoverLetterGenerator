@@ -166,3 +166,5 @@ vectorstore.pkl
 .DS_Store
 generated_cover_letters/pdf/*
 generated_cover_letters/txt/*
+
+*.pkl

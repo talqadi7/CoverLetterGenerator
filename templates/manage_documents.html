@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Documents</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+    
+        .navbar {
+            background-color: #343a40;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+    
+        .navbar-brand {
+            color: #f8f9fa;
+            font-weight: 700;
+        }
+    
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid rgba(0,0,0,.125);
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
+        }
+    
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            transition: all 0.3s ease;
+        }
+    
+        .btn-primary:hover {
+            background-color: #0069d9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,.15);
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,.15);
+        }
+
+        .document-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .document-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .document-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,.1);
+        }
+        
+        .document-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .document-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #007bff;
+        }
+        
+        .document-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .document-meta {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #dee2e6;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background-color: #007bff;
+            bottom: -10px;
+            left: 0;
+        }
+        
+        footer {
+            margin-top: 50px;
+            padding: 20px 0;
+            background-color: #343a40;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,.1);
+        }
+        
+        .alert {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            animation: fadeInOut 5s;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-file-alt mr-2"></i> Cover Letter Generator
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-bars mr-1"></i> Menu
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{{ url_for('set_keys')}}"><i class="fas fa-key mr-2"></i>Set API Keys</a>
+                            <a class="dropdown-item" href="{{ url_for('upload_page')}}"><i class="fas fa-upload mr-2"></i>Upload Documents</a>
+                            <a class="dropdown-item" href="{{ url_for('job_details_page')}}"><i class="fas fa-file-alt mr-2"></i>Generate Cover Letter</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Alert message -->
+    <div class="alert alert-success" role="alert" id="success-alert">
+        <i class="fas fa-check-circle mr-2"></i> <span id="alert-message"></span>
+    </div>
+
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h1 class="display-4">Manage Your Documents</h1>
+            <p class="lead">View, download, and delete your uploaded documents</p>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <a href="{{ url_for('upload_page') }}" class="btn btn-primary">
+                    <i class="fas fa-upload mr-2"></i>Upload More Documents
+                </a>
+            </div>
+        </div>
+        
+        <!-- Resume Documents Section -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="section-title mb-0"><i class="fas fa-file-pdf mr-2"></i>Resume Documents</h4>
+            </div>
+            <div class="card-body">
+                {% if resumes %}
+                <ul class="document-list">
+                    {% for resume in resumes %}
+                    <li class="document-item">
+                        <div class="document-info">
+                            <i class="fas fa-file-pdf document-icon"></i>
+                            <div>
+                                <div>{{ resume.filename }}</div>
+                                <div class="document-meta">{{ resume.file_size }} - {{ resume.upload_date }}</div>
+                            </div>
+                        </div>
+                        <div class="document-actions">
+                            <a href="{{ url_for('view_document', document_id=resume.id) }}" class="btn btn-sm btn-primary" title="View" target="_blank">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ url_for('download_document', document_id=resume.id) }}" class="btn btn-sm btn-primary" title="Download">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            <button class="btn btn-sm btn-danger delete-document" data-id="{{ resume.id }}" title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-file-upload"></i>
+                    <p>No resume documents uploaded yet.</p>
+                    <a href="{{ url_for('upload_page') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-upload mr-2"></i>Upload Resume
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Cover Letter Documents Section -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="section-title mb-0"><i class="fas fa-file-alt mr-2"></i>Cover Letter Samples</h4>
+            </div>
+            <div class="card-body">
+                {% if cover_letters %}
+                <ul class="document-list">
+                    {% for cover_letter in cover_letters %}
+                    <li class="document-item">
+                        <div class="document-info">
+                            <i class="fas fa-file-alt document-icon"></i>
+                            <div>
+                                <div>{{ cover_letter.filename }}</div>
+                                <div class="document-meta">{{ cover_letter.file_size }} - {{ cover_letter.upload_date }}</div>
+                            </div>
+                        </div>
+                        <div class="document-actions">
+                            <a href="{{ url_for('view_document', document_id=cover_letter.id) }}" class="btn btn-sm btn-primary" title="View" target="_blank">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ url_for('download_document', document_id=cover_letter.id) }}" class="btn btn-sm btn-primary" title="Download">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            <button class="btn btn-sm btn-danger delete-document" data-id="{{ cover_letter.id }}" title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <p>No cover letter samples uploaded yet.</p>
+                    <p class="small text-muted">Uploading previous cover letters helps the AI match your writing style.</p>
+                    <a href="{{ url_for('upload_page') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-upload mr-2"></i>Upload Cover Letter Samples
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Other Documents Section -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="section-title mb-0"><i class="fas fa-folder-open mr-2"></i>Additional Documents</h4>
+            </div>
+            <div class="card-body">
+                {% if other_documents %}
+                <ul class="document-list">
+                    {% for document in other_documents %}
+                    <li class="document-item">
+                        <div class="document-info">
+                            <i class="fas fa-file document-icon"></i>
+                            <div>
+                                <div>{{ document.filename }}</div>
+                                <div class="document-meta">{{ document.file_size }} - {{ document.upload_date }}</div>
+                            </div>
+                        </div>
+                        <div class="document-actions">
+                            <a href="{{ url_for('view_document', document_id=document.id) }}" class="btn btn-sm btn-primary" title="View" target="_blank">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ url_for('download_document', document_id=document.id) }}" class="btn btn-sm btn-primary" title="Download">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            <button class="btn btn-sm btn-danger delete-document" data-id="{{ document.id }}" title="Delete">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-folder-open"></i>
+                    <p>No additional documents uploaded yet.</p>
+                    <p class="small text-muted">Add supporting documents like project descriptions or certifications.</p>
+                    <a href="{{ url_for('upload_page') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-upload mr-2"></i>Upload Additional Documents
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer mt-auto py-3 bg-dark text-white">
+        <div class="container text-center">
+            <span>Connect with me on:</span>
+            <a href="https://github.com/talqadi7" target="_blank" class="text-white ml-2">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://linkedin.com/in/talqadi7" target="_blank" class="text-white ml-2">
+                <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="mailto:taq.alqadi@gmail.com" class="text-white ml-2">
+                <i class="fas fa-envelope"></i> Email
+            </a>
+        </div>
+    </footer>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this document? This action cannot be undone.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Handle delete button clicks
+            let documentToDelete = null;
+            
+            $('.delete-document').click(function() {
+                documentToDelete = $(this).data('id');
+                $('#deleteConfirmModal').modal('show');
+            });
+            
+            $('#confirmDelete').click(function() {
+                if (documentToDelete) {
+                    $.ajax({
+                        url: '/delete_document/' + documentToDelete,
+                        type: 'DELETE',
+                        success: function(result) {
+                            // Remove the document from the list
+                            $('[data-id="' + documentToDelete + '"]').closest('.document-item').fadeOut('slow', function() {
+                                $(this).remove();
+                                
+                                // Check if this was the last item in the section
+                                const sectionLists = $('.document-list');
+                                sectionLists.each(function() {
+                                    if ($(this).children().length === 0) {
+                                        const section = $(this).closest('.card-body');
+                                        const sectionTitle = $(this).closest('.card').find('.card-header h4').text();
+                                        let icon = 'fas fa-file';
+                                        let uploadText = 'Upload Document';
+                                        let description = '';
+                                        
+                                        if (sectionTitle.includes('Resume')) {
+                                            icon = 'fas fa-file-pdf';
+                                            uploadText = 'Upload Resume';
+                                        } else if (sectionTitle.includes('Cover Letter')) {
+                                            icon = 'fas fa-file-alt';
+                                            uploadText = 'Upload Cover Letter Samples';
+                                            description = '<p class="small text-muted">Uploading previous cover letters helps the AI match your writing style.</p>';
+                                        } else if (sectionTitle.includes('Additional')) {
+                                            icon = 'fas fa-folder-open';
+                                            uploadText = 'Upload Additional Documents';
+                                            description = '<p class="small text-muted">Add supporting documents like project descriptions or certifications.</p>';
+                                        }
+                                        
+                                        $(this).replaceWith(`
+                                            <div class="empty-state">
+                                                <i class="${icon}"></i>
+                                                <p>No documents uploaded yet.</p>
+                                                ${description}
+                                                <a href="{{ url_for('upload_page') }}" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-upload mr-2"></i>${uploadText}
+                                                </a>
+                                            </div>
+                                        `);
+                                    }
+                                });
+                                
+                                // Show success message
+                                showAlert('Document successfully deleted!');
+                            });
+                            
+                            $('#deleteConfirmModal').modal('hide');
+                        },
+                        error: function() {
+                            showAlert('Error deleting document. Please try again.', 'danger');
+                            $('#deleteConfirmModal').modal('hide');
+                        }
+                    });
+                }
+            });
+            
+            // Function to show alert messages
+            function showAlert(message, type = 'success') {
+                const alert = $('#success-alert');
+                alert.removeClass('alert-success alert-danger');
+                alert.addClass('alert-' + type);
+                $('#alert-message').text(message);
+                alert.fadeIn();
+                
+                setTimeout(function() {
+                    alert.fadeOut();
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

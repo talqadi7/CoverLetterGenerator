@@ -9,13 +9,17 @@ from flask import (
     send_file,
 )
 from src.services import *
-from pdfdocument.document import PDFDocument
+from src.document_manager import DocumentManager
 import os
+import logging
 
 logging.basicConfig(level=logging.INFO)
 
 
 def register_routes(app, cover_letter_generator):
+    # Initialize the document manager
+    document_manager = DocumentManager()
+    
     @app.route("/")
     def index():
         return redirect(url_for("set_keys"))
@@ -43,8 +47,15 @@ def register_routes(app, cover_letter_generator):
         company_name = request.form.get("company_name")
         position = request.form.get("position")
         job_descript = request.form.get("job_descript")
+        
+        # Get the new user information fields
+        user_name = request.form.get("user_name", "")
+        user_address = request.form.get("user_address", "")
+        user_email = request.form.get("user_email", "")
+        
         is_running, response, status_code = generate_cover_letter_async(
-            cover_letter_generator, company_name, position, job_descript
+            cover_letter_generator, company_name, position, job_descript,
+            user_name, user_address, user_email
         )
         if is_running:
             return response, status_code
@@ -57,15 +68,17 @@ def register_routes(app, cover_letter_generator):
             if cover_letter_generator.is_running:
                 return {"status": "A cover letter generation is in progress."}, 409
         cover_letter_final = cover_letter_generator.query_final()
-        save_cover_letter_to_file(
+        
+        # Save the cover letter to a file and get the filename
+        txt_filename = save_cover_letter_to_file(
             cover_letter_final, cover_letter_generator.company_name
         )
-
+        
+        logging.info(f"Cover letter saved to {txt_filename}")
         return jsonify({"cover_letter": cover_letter_final})
 
     @app.route("/generate_cover_letter", methods=["GET"])
     def stream_generate_cover_letter():
-        # cover_letter_generator.reset()
         def generate():
             for message in cover_letter_generator.get_streamed_messages():
                 yield f"data: {message}\n\n"
@@ -74,8 +87,6 @@ def register_routes(app, cover_letter_generator):
 
     @app.route("/set_keys", methods=["GET", "POST"])
     def set_keys():
-        # Location of the secrets file
-
         # If the secrets file already exists and the keys are set, redirect to upload page
         if are_keys_set():
             return redirect(url_for("upload_page"))
@@ -126,25 +137,115 @@ def register_routes(app, cover_letter_generator):
 
     @app.route("/download", methods=["GET"])
     def download():
-        txt_filename = generate_filename(cover_letter_generator.company_name, "txt")
-        pdf_filename = generate_filename(cover_letter_generator.company_name, "pdf")
+        try:
+            # Get sanitized company name
+            sanitized_company_name = sanitize_filename(cover_letter_generator.company_name)
+            logging.info(f"Downloading cover letter for company: {sanitized_company_name}")
+            
+            # Generate filenames
+            txt_filename = generate_filename(sanitized_company_name, "txt")
+            pdf_filename = generate_filename(sanitized_company_name, "pdf")
 
-        # Check if the text file exists
-        if not file_exists(txt_filename):
-            return "Error: text file not found"
+            logging.info(f"Text filename: {txt_filename}")
+            logging.info(f"PDF filename: {pdf_filename}")
+            
+            # Ensure directories exist
+            os.makedirs(os.path.dirname(txt_filename), exist_ok=True)
+            os.makedirs(os.path.dirname(pdf_filename), exist_ok=True)
 
-        # Read the text from the text file
-        text = read_text_file(txt_filename)
+            # If text file doesn't exist, create it from the current cover letter
+            if not file_exists(txt_filename):
+                logging.info("Text file doesn't exist, creating it now")
+                cover_letter_text = cover_letter_generator.query_final()
+                if not cover_letter_text:
+                    logging.error("No cover letter content available")
+                    return "Error: No cover letter has been generated", 400
+                
+                # Save the cover letter to a file
+                txt_filename = save_cover_letter_to_file(cover_letter_text, sanitized_company_name)
+            
+            # Read the text from the text file
+            try:
+                text = read_text_file(txt_filename)
+                logging.info(f"Successfully read text file with {len(text)} characters")
+            except Exception as e:
+                logging.error(f"Error reading text file: {e}")
+                return f"Error reading text file: {str(e)}", 500
 
-        # Create a PDF from the text
-        create_pdf_from_text(text, pdf_filename)
+            # Create a PDF from the text
+            try:
+                create_pdf_from_text(text, pdf_filename)
+                logging.info(f"Successfully created PDF file at {pdf_filename}")
+            except Exception as e:
+                logging.error(f"Error creating PDF: {e}")
+                return f"Error creating PDF: {str(e)}", 500
 
-        # Check if the PDF was created successfully
-        if not file_exists(pdf_filename):
-            return "Error: could not create PDF"
+            # Check if the PDF was created successfully
+            if not file_exists(pdf_filename):
+                logging.error(f"PDF file was not created: {pdf_filename}")
+                return "Error: Could not create PDF", 500
 
-        # re-initialize the cover letter generator
-        reset_generator(cover_letter_generator)
-
-        # Send the PDF file to the user
-        return send_file(pdf_filename, as_attachment=True)
+            # Send the PDF file to the user
+            try:
+                download_name = f"{sanitized_company_name}_cover_letter.pdf"
+                logging.info(f"Sending file {pdf_filename} as {download_name}")
+                return send_file(
+                    pdf_filename, 
+                    as_attachment=True, 
+                    download_name=download_name
+                )
+            except Exception as e:
+                logging.error(f"Error sending file: {e}")
+                return f"Error sending file: {str(e)}", 500
+                
+        except Exception as e:
+            logging.error(f"Unexpected error in download route: {e}")
+            return f"An unexpected error occurred: {str(e)}", 500
+            
+    # New routes for document management
+    @app.route("/manage_documents", methods=["GET"])
+    def manage_documents():
+        resumes, cover_letters, other_documents = document_manager.get_documents()
+        return render_template("manage_documents.html", 
+                             resumes=resumes, 
+                             cover_letters=cover_letters, 
+                             other_documents=other_documents)
+    
+    @app.route("/view_document/<document_id>", methods=["GET"])
+    def view_document(document_id):
+        document = document_manager.get_document_by_id(document_id)
+        if document is None:
+            return "Document not found", 404
+        
+        # Determine content type based on file extension
+        _, file_extension = os.path.splitext(document['path'])
+        content_type = "text/plain"  # Default content type
+        
+        if file_extension.lower() == '.pdf':
+            content_type = "application/pdf"
+        elif file_extension.lower() == '.docx':
+            content_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            
+        return send_file(document['path'], mimetype=content_type)
+    
+    @app.route("/download_document/<document_id>", methods=["GET"])
+    def download_document(document_id):
+        document = document_manager.get_document_by_id(document_id)
+        if document is None:
+            return "Document not found", 404
+            
+        return send_file(
+            document['path'], 
+            as_attachment=True, 
+            download_name=document['filename']
+        )
+    
+    @app.route("/delete_document/<document_id>", methods=["DELETE"])
+    def delete_document(document_id):
+        success = document_manager.delete_document(document_id)
+        if success:
+            # Reset the generator to reload documents
+            reset_generator(cover_letter_generator)
+            return jsonify({"status": "success"}), 200
+        else:
+            return jsonify({"status": "error", "message": "Failed to delete document"}), 400

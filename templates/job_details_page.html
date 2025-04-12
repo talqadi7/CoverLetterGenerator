@@ -18,41 +18,133 @@
             white-space: -o-pre-wrap;    /* Opera 7 */
             word-wrap: break-word;       /* Internet Explorer 5.5+ */
         }
-    </style>
-    <style>
+        
         body {
             background-color: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow-x: hidden;
         }
     
         .navbar {
             background-color: #343a40;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
         }
     
         .navbar-brand {
             color: #f8f9fa;
+            font-weight: 700;
         }
     
         .card {
-            border-color: #6c757d;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid rgba(0,0,0,.125);
+            border-top-left-radius: 10px !important;
+            border-top-right-radius: 10px !important;
         }
     
         .btn-primary {
             background-color: #007bff;
             border-color: #007bff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,.15);
         }
     
         .btn-success {
             background-color: #28a745;
             border-color: #28a745;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,.15);
         }
     
         .btn-secondary {
             background-color: #6c757d;
             border-color: #6c757d;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            transition: all 0.3s ease;
         }
-    </style>
-
-    <style>
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,.15);
+        }
+        
+        .btn-outline-secondary {
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,.15);
+        }
+        
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+        }
+        
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        
+        .custom-section {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .lead {
+            color: #6c757d;
+        }
+        
+        footer {
+            margin-top: 50px;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,.1);
+        }
+        
+        footer a {
+            transition: all 0.3s ease;
+        }
+        
+        footer a:hover {
+            transform: translateY(-2px);
+        }
+        
+        .display-4 {
+            font-weight: 700;
+            color: #343a40;
+        }
+        
+        /* Animation for the LinkedIn scrape button */
         .btn-animate {
             animation: btn-animation 1s infinite;
         }
@@ -62,29 +154,149 @@
             50% { background-color: #0056b3; }
             100% { background-color: #007bff; }
         }
+        
+        /* Animation for download button appearance */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        /* Spinner customization */
+        .spinner-border {
+            color: #007bff;
+            width: 3rem;
+            height: 3rem;
+            margin: 30px auto;
+            display: block;
+        }
+        
+        #cover_letter {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #212529;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background-color: #007bff;
+            bottom: -10px;
+            left: 0;
+        }
+        
+        /* Borat Element Style */
+        .borat-element {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            z-index: 9999;
+            pointer-events: none;
+            user-select: none;
+            transform-origin: center;
+            animation: float 8s linear forwards;
+        }
+        
+        .borat-speech {
+            position: absolute;
+            background-color: white;
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            white-space: nowrap;
+            z-index: 9998;
+            pointer-events: none;
+            animation: speech-bubble 8s linear forwards;
+        }
+        
+        .borat-speech:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px 8px 0;
+            border-style: solid;
+            border-color: white transparent;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--travel-x), var(--travel-y)) rotate(var(--rotate-deg)) scale(var(--scale));
+                opacity: 0;
+            }
+        }
+        
+        @keyframes speech-bubble {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 0;
+            }
+            15% {
+                transform: translate(0, -20px) scale(1);
+                opacity: 1;
+            }
+            80% {
+                transform: translate(var(--travel-x) * 0.8, var(--travel-y) * 0.8 - 20px) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--travel-x), var(--travel-y) - 20px) scale(0.8);
+                opacity: 0;
+            }
+        }
     </style>
-    
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">
-            <i class="fas fa-file-alt"></i> Cover Letter Generator
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Menu
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{{ url_for('set_keys')}}">Set API Keys</a>
-                        <a class="dropdown-item" href="{{ url_for('upload_page')}}">Upload More Files</a>
-                    </div>
-                </li>
-            </ul>
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-file-alt mr-2"></i> Cover Letter Generator
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-bars mr-1"></i> Menu
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{{ url_for('set_keys')}}"><i class="fas fa-key mr-2"></i>Set API Keys</a>
+                            <a class="dropdown-item" href="{{ url_for('upload_page')}}"><i class="fas fa-upload mr-2"></i>Upload More Files</a>
+                            <a class="dropdown-item" href="{{ url_for('manage_documents')}}"><i class="fas fa-folder mr-2"></i>Manage Documents</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     
@@ -93,48 +305,104 @@
             <h1 class="display-4">Cover Letter Generator</h1>
             <p class="lead">Generate professional cover letters in seconds</p>
         </div>
-        <div class="card">
+        
+        <!-- Personal Information Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="section-title mb-0"><i class="fas fa-user mr-2"></i>Your Information</h4>
+            </div>
             <div class="card-body">
-                <form id="cover-letter-form">
-                    <div class="form-group">
-                        <label for="linkedin_url">LinkedIn URL:</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="linkedin_url" name="linkedin_url">
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-secondary" id="scrape_linkedin">Scrape LinkedIn</button>
+                <form id="user-info-form">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="user_name"><i class="fas fa-id-card mr-1"></i> Your Name:</label>
+                                <input type="text" class="form-control" id="user_name" name="user_name" placeholder="John Doe">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="user_address"><i class="fas fa-map-marker-alt mr-1"></i> Your Address:</label>
+                                <input type="text" class="form-control" id="user_address" name="user_address" placeholder="City, State">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="user_email"><i class="fas fa-envelope mr-1"></i> Your Email:</label>
+                                <input type="email" class="form-control" id="user_email" name="user_email" placeholder="your.email@example.com">
                             </div>
                         </div>
                     </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Job Details Section -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="section-title mb-0"><i class="fas fa-briefcase mr-2"></i>Job Details</h4>
+            </div>
+            <div class="card-body">
+                <form id="cover-letter-form">
                     <div class="form-group">
-                        <label for="company_name">Company Name:</label>
-                        <input type="text" class="form-control" id="company_name" name="company_name" required>
+                        <label for="linkedin_url"><i class="fab fa-linkedin mr-1"></i> LinkedIn Job URL:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="linkedin_url" name="linkedin_url" placeholder="https://www.linkedin.com/jobs/view/...">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-secondary" id="scrape_linkedin">
+                                    <i class="fas fa-search mr-1"></i> Scrape LinkedIn
+                                </button>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Paste a LinkedIn job URL to automatically extract job details</small>
                     </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="company_name"><i class="fas fa-building mr-1"></i> Company Name:</label>
+                                <input type="text" class="form-control" id="company_name" name="company_name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="position"><i class="fas fa-user-tie mr-1"></i> Position:</label>
+                                <input type="text" class="form-control" id="position" name="position" required>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="form-group">
-                        <label for="position">Position:</label>
-                        <input type="text" class="form-control" id="position" name="position" required>
+                        <label for="job_descript"><i class="fas fa-clipboard-list mr-1"></i> Job Description:</label>
+                        <textarea class="form-control" id="job_descript" name="job_descript" rows="6" required></textarea>
+                        <small class="form-text text-muted">Paste the full job description here or use the LinkedIn scraper above</small>
                     </div>
-                    <div class="form-group">
-                        <label for="job_descript">Job Description:</label>
-                        <textarea class="form-control" id="job_descript" name="job_descript" rows="5" required></textarea>
-                    </div>
-                    <div class="form-group d-flex justify-content-center align-items-center">
-                        <button type="submit" class="btn btn-primary mr-2">
-                            <i class="fas fa-magic"></i> Generate Cover Letter
+
+                    <!-- Hidden fields for user info -->
+                    <input type="hidden" id="form_user_name" name="user_name">
+                    <input type="hidden" id="form_user_address" name="user_address">
+                    <input type="hidden" id="form_user_email" name="user_email">
+                    
+                    <div class="form-group d-flex justify-content-center align-items-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg" id="generate-btn">
+                            <i class="fas fa-magic mr-2"></i> Generate Cover Letter
                         </button>
                     </div>
                 </form>
             </div>
         </div>
+        
+        <!-- Cover Letter Output Section -->
         <div class="mt-5">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h2 class="mb-0">Cover Letter:</h2>
+                    <h4 class="section-title mb-0"><i class="fas fa-file-alt mr-2"></i>Your Cover Letter</h4>
                     <div class="d-flex align-items-center">
-                        <button id="copy-btn" class="btn btn-outline-secondary mr-2">
-                            <i class="fas fa-copy"></i> Copy
+                        <button id="copy-btn" class="btn btn-outline-secondary mr-2" disabled>
+                            <i class="fas fa-copy mr-1"></i> Copy
                         </button>
                         <a href="/download" id="download-button" class="btn btn-success" style="display: none;">
-                            <i class="fas fa-download"></i> Download Cover Letter
+                            <i class="fas fa-download mr-1"></i> Download PDF
                         </a>
                     </div>
                 </div>
@@ -146,9 +414,11 @@
                 </div>
             </div>
         </div>
-        <footer class="footer mt-auto py-3 bg-dark text-white">
-            <div class="container text-center">
-                <span>Connect with me on:</span>
+        
+        <!-- Footer -->
+        <footer class="footer mt-auto py-3 bg-dark text-white text-center">
+            <div class="container">
+                <span>Connect with me:</span>
                 <a href="https://github.com/talqadi7" target="_blank" class="text-white ml-2">
                     <i class="fab fa-github"></i> GitHub
                 </a>
@@ -160,105 +430,315 @@
                 </a>
             </div>
         </footer>
+    </div>
         
     <script>
+        // Borat phrases for speech bubbles
+        const boratPhrases = [
+            "Very nice!",
+            "Great success!",
+            "I like!",
+            "High five!",
+            "Wawaweewa!",
+            "Is nice!",
+            "King in the castle!",
+            "Chenqui!",
+            "Jagshemash!",
+            "Verrry excite!"
+        ];
+        
+        // Borat image paths
+        const boratImages = [
+            "/static/images/borat1.svg",
+            "/static/images/borat2.svg",
+            "/static/images/simbabutt.svg"
+        ];
+        
+        // Function to create a Borat element
+        function createBorat() {
+            // Create the Borat image element
+            const borat = document.createElement("img");
+            borat.classList.add("borat-element");
+            
+            // Select random Borat image
+            const randomImage = boratImages[Math.floor(Math.random() * boratImages.length)];
+            borat.src = randomImage;
+            
+            // Random starting position near the button
+            const generateBtn = document.getElementById("generate-btn");
+            const btnRect = generateBtn.getBoundingClientRect();
+            
+            const startX = btnRect.left + btnRect.width/2 + (Math.random() * 40 - 20);
+            const startY = btnRect.top + btnRect.height/2 + (Math.random() * 40 - 20);
+            
+            // Set random direction and distance to travel
+            const travelX = (Math.random() - 0.5) * window.innerWidth;
+            const travelY = (Math.random() - 0.5) * window.innerHeight;
+            const rotateDeg = Math.random() * 720 - 360; // Random rotation
+            const scale = 0.5 + Math.random() * 1.5; // Random scaling
+            
+            // Apply styles
+            borat.style.left = `${startX}px`;
+            borat.style.top = `${startY}px`;
+            borat.style.setProperty('--travel-x', `${travelX}px`);
+            borat.style.setProperty('--travel-y', `${travelY}px`);
+            borat.style.setProperty('--rotate-deg', `${rotateDeg}deg`);
+            borat.style.setProperty('--scale', `${scale}`);
+            
+            // Add to body
+            document.body.appendChild(borat);
+            
+            // Randomly add a speech bubble with Borat phrase
+            if (Math.random() > 0.5) {
+                const phrase = boratPhrases[Math.floor(Math.random() * boratPhrases.length)];
+                const speech = document.createElement("div");
+                speech.classList.add("borat-speech");
+                speech.textContent = phrase;
+                
+                speech.style.left = `${startX}px`;
+                speech.style.top = `${startY - 30}px`;
+                speech.style.setProperty('--travel-x', `${travelX}px`);
+                speech.style.setProperty('--travel-y', `${travelY}px`);
+                
+                document.body.appendChild(speech);
+                
+                // Remove speech bubble after animation completes
+                setTimeout(() => {
+                    speech.remove();
+                }, 8000);
+            }
+            
+            // Remove Borat element after animation completes
+            setTimeout(() => {
+                borat.remove();
+            }, 8000);
+        }
+        
+        // Function to create a burst of Borat elements
+        function createBoratBurst(count = 15) {
+            // Create multiple Borats with a slight delay between them
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    createBorat();
+                }, i * 100); // Stagger the creation
+            }
+        }
+        
+        // Enable or disable the copy button based on content
+        function updateCopyButton() {
+            const coverLetterContent = $('#cover_letter').text().trim();
+            if (coverLetterContent) {
+                $('#copy-btn').prop('disabled', false);
+            } else {
+                $('#copy-btn').prop('disabled', true);
+            }
+        }
+
+        // Transfer user info from the info form to the hidden fields
+        function transferUserInfo() {
+            $('#form_user_name').val($('#user_name').val());
+            $('#form_user_address').val($('#user_address').val());
+            $('#form_user_email').val($('#user_email').val());
+        }
+
+        // Save form values to localStorage
+        function saveFormValues() {
+            // Save user info
+            localStorage.setItem('user_name', $('#user_name').val());
+            localStorage.setItem('user_address', $('#user_address').val());
+            localStorage.setItem('user_email', $('#user_email').val());
+
+            // Save job details
+            localStorage.setItem('linkedin_url', $('#linkedin_url').val());
+            localStorage.setItem('company_name', $('#company_name').val());
+            localStorage.setItem('position', $('#position').val());
+            localStorage.setItem('job_descript', $('#job_descript').val());
+        }
+
+        // Load form values from localStorage
+        function loadFormValues() {
+            // Load user info
+            $('#user_name').val(localStorage.getItem('user_name') || '');
+            $('#user_address').val(localStorage.getItem('user_address') || '');
+            $('#user_email').val(localStorage.getItem('user_email') || '');
+
+            // Load job details
+            $('#linkedin_url').val(localStorage.getItem('linkedin_url') || '');
+            $('#company_name').val(localStorage.getItem('company_name') || '');
+            $('#position').val(localStorage.getItem('position') || '');
+            $('#job_descript').val(localStorage.getItem('job_descript') || '');
+
+            // Transfer user info to hidden fields
+            transferUserInfo();
+        }
+            
+        // LinkedIn scraper button
         $('#scrape_linkedin').click(function() {
             $(this).addClass('btn-animate');
             var linkedin_url = $('#linkedin_url').val();
+            if (!linkedin_url) {
+                alert('Please enter a LinkedIn job URL');
+                $(this).removeClass('btn-animate');
+                return;
+            }
+
             $.post('/scrape_linkedin', {linkedin_url: linkedin_url}, function(data) {
                 $('#company_name').val(data.company_name);
                 $('#position').val(data.job_title);
                 $('#job_descript').val(data.job_description);
                 $('#scrape_linkedin').removeClass('btn-animate');
+                // Add a single Borat when LinkedIn scraping succeeds
+                createBorat();
+                // Save the form values after scraping
+                saveFormValues();
+            }).fail(function() {
+                alert('Failed to scrape LinkedIn. Please enter job details manually.');
+                $('#scrape_linkedin').removeClass('btn-animate');
             });
         });
-
+        
+        // Cover letter generation form submission
         $('#cover-letter-form').submit(function(e) {
             e.preventDefault();
-            $('.spinner-border').show(); // Show the loading animation
-            // Clear the input fields
+
+            // Transfer user info to the form
+            transferUserInfo();
+
+            // Show loading spinner
+            $('.spinner-border').show();
             $('#cover_letter').text('');
-    
+            $('#copy-btn').prop('disabled', true);
+            $('#download-button').hide();
+
+            // Create a burst of Borat elements when generating starts
+            createBoratBurst(20);
+
             $.post('/generate_cover_letter', $(this).serialize(), function(data) {
-                // might not need this anymore as data is streamed
-                // $('#cover_letter').text(data.cover_letter); 
-                $('.spinner-border').hide(); // Hide the loading animation
+                // Set up the event source for streaming response
                 var source = new EventSource("/generate_cover_letter");
-                            source.onmessage = function(event) {
-                                var token = event.data;
-                                if (token === 'END') {
-                                    $('.spinner-border').show();
-                                    console.log("WE'RE END BRO");
-                                    source.close();
-                            
-                                    // Fetch the final text
-                                    $.get('/get_final_cover_letter', function(data) {
-                                            setTimeout(function() {
-                                                // Replace the content of the chatbox with the final text
-                                                $('#cover_letter').text(data.cover_letter);
-                                                $('.spinner-border').hide(); // Hide the loader
-                                                $('#cover_letter').show(); // Show the chatbox
-                                                $('#download-button').show(); // Show the download button
-                                            }, 1000); // Wait for 1 second
-                                        });
-                                } else {
-                                    var chatbox = document.getElementById('cover_letter');
-                                    chatbox.textContent += token;
-                                }
-                            };
-                // Store the input and output in the log
-                const index = $('#previous-requests option').length;
-                $('#previous-requests').append(`<option value="${index}">${companyName} - ${position}</option>`);
-    
-                // Store the input and output as data attributes for the option
-                const option = $('#previous-requests option[value="' + index + '"]');
-                option.data('companyName', companyName);
-                option.data('position', position);
-                option.data('jobDescription', jobDescription);
-                option.data('coverLetter', coverLetter);
-    
-                // Update the input boxes when a previous request is selected
-                $('#previous-requests').change(function() {
-                    const selectedOption = $('#previous-requests option:selected');
-                    $('#company_name').val(selectedOption.data('companyName'));
-                    $('#position').val(selectedOption.data('position'));
-                    $('#job_descript').val(selectedOption.data('jobDescription'));
-                    $('#cover_letter').text(selectedOption.data('coverLetter'));
-                });
+
+                source.onmessage = function(event) {
+                    var token = event.data;
+                    if (token === 'END') {
+                        source.close();
+
+                        // Fetch the final text
+                        $.get('/get_final_cover_letter', function(data) {
+                            setTimeout(function() {
+                                // Replace the content with the final text
+                                $('#cover_letter').text(data.cover_letter);
+                                $('.spinner-border').hide();
+                                updateCopyButton();
+                                
+                                // Show download button with animation
+                                $('#download-button').addClass('fade-in').show();
+                                
+                                // Create another burst of Borats when completed
+                                createBoratBurst(15);
+                            }, 1000);
+                        }).fail(function() {
+                            $('.spinner-border').hide();
+                            $('#cover_letter').text('Failed to generate cover letter. Please try again.');
+                            alert('An error occurred while generating the cover letter.');
+                        });
+                    } else {
+                        // Append streaming tokens to the output
+                        var chatbox = document.getElementById('cover_letter');
+                        chatbox.textContent += token;
+                        
+                        // Occasionally show a single Borat during streaming
+                        if (Math.random() < 0.1) {
+                            createBorat();
+                        }
+                    }
+                };
+                
+                source.onerror = function() {
+                    source.close();
+                    $('.spinner-border').hide();
+                    alert('An error occurred during cover letter generation.');
+                };
+            }).fail(function() {
+                $('.spinner-border').hide();
+                alert('Failed to start cover letter generation. Please try again.');
             });
         });
-    </script>
-    
-    
-    <script>
-        document.querySelector("#copy-btn").addEventListener("click", function() {
-            // Create a new textarea element and give it id='t'
-            var copyText = document.createElement('textarea');
-            copyText.id = 't';
-            // Optional step to make less noise on the page, if any!
-            copyText.style.height = "0";
-            // Now append it to your page somewhere, I chose <body>
-            document.body.appendChild(copyText);
-            // Give our textarea a value of whatever inside the div of id='cover_letter'
-            copyText.value = document.getElementById('cover_letter').innerText;
-            // Now copy whatever inside the textarea to clipboard
-            var copy = document.getElementById('t');
-            copy.select();
-            document.execCommand('copy');
-            // Remove the textarea
-            document.body.removeChild(copyText);
-
-            // Add a checkmark next to the button
-            var checkmarkSpan = document.createElement('span');
-            checkmarkSpan.innerHTML = '✔️';
-            checkmarkSpan.className= 'inline-component'
-            document.getElementById("copy-btn").className = 'inline-component';  // Apply the new class to the button
-            document.getElementById("copy-btn").after(checkmarkSpan);
+        
+        // Copy button functionality
+        $("#copy-btn").click(function() {
+            const coverLetterText = document.getElementById('cover_letter').innerText;
             
-            // Remove the checkmark after a short delay
-            setTimeout(function() {
-                document.getElementById("copy-btn").nextSibling.remove();
-            }, 2000);
+            // Use the Clipboard API when available
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(coverLetterText)
+                    .then(() => {
+                        // Show success indicator
+                        const originalText = $(this).html();
+                        $(this).html('<i class="fas fa-check mr-1"></i> Copied!');
+                        
+                        // Create a small burst of Borats when copied
+                        createBoratBurst(5);
+                        
+                        // Reset button text after delay
+                        setTimeout(() => {
+                            $(this).html(originalText);
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        alert('Failed to copy to clipboard. Please try manually selecting the text.');
+                    });
+            } else {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = coverLetterText;
+                textarea.style.position = 'fixed';
+                document.body.appendChild(textarea);
+                textarea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    // Show success indicator
+                    const originalText = $(this).html();
+                    $(this).html('<i class="fas fa-check mr-1"></i> Copied!');
+                    
+                    // Create a small burst of Borats when copied
+                    createBoratBurst(5);
+                    
+                    // Reset button text after delay
+                    setTimeout(() => {
+                        $(this).html(originalText);
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    alert('Failed to copy to clipboard. Please try manually selecting the text.');
+                }
+                
+                document.body.removeChild(textarea);
+            }
+        });
+        
+        // Make sure download button works correctly
+        $(document).on('click', '#download-button', function(e) {
+            // If no cover letter is generated yet, prevent download
+            if (!$('#cover_letter').text().trim()) {
+                e.preventDefault();
+                alert('Please generate a cover letter first.');
+            } else {
+                // Create a small burst of Borats when downloading
+                createBoratBurst(10);
+            }
+        });
+
+        // Add event listeners to save form values on change
+        $('#user-info-form input, #cover-letter-form input, #cover-letter-form textarea').on('change', function() {
+            saveFormValues();
+        });
+
+        // Load saved values when the page loads
+        $(document).ready(function() {
+            loadFormValues();
+            updateCopyButton();
         });
     </script>
 
