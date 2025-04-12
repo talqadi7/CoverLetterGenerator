@@ -12,43 +12,74 @@ This project produces personalized cover letters based on the input of company n
 
 ### Prerequisites
 
-- Python 3.9 or newer.
+- Python 3.12 or newer (required by the project dependencies)
+- uv package manager (for faster dependency installation)
 
-### Step 1: Clone the repository
+### Step 1: Install Python
 
-You can clone the repository by running the following command:
+Ensure you have Python 3.12+ installed on your system. You can download it from [python.org](https://www.python.org/downloads/) or use your system's package manager.
 
+To verify your Python version:
+
+```bash
+python --version
 ```
+
+### Step 2: Install uv
+
+uv is a fast Python package installer and resolver built in Rust. Install it using one of the following methods:
+
+**For macOS/Linux:**
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**For Windows:**
+```bash
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+**Using pip:**
+```bash
+pip install uv
+```
+
+### Step 3: Clone the repository
+
+Clone the repository by running:
+
+```bash
 git clone https://github.com/talqadi7/CoverLetterGenerator
+cd CoverLetterGenerator
 ```
 
-### Step 2: Install the requirements
+### Step 4: Install the dependencies
 
-To install the requirements, navigate into the cloned repository and run:
+Using uv for faster installation:
 
+```bash
+uv sync
 ```
-pip install -r requirements.txt
-```
 
-### Step 3: Run the application
+### Step 5: Run the application
 
-After installing the requirements, you can start the application by running:
+After installing the dependencies, start the application:
 
-```
-python app.py
+```bash
+uv run python app.py
 ```
 
 Then, navigate to `http://localhost:5000` in your web browser to use the application.
 
-### Step 4: Set the API keys
+### Step 6: Set the API keys
 
 The first time you run the application, it will prompt you to input your API keys for OpenAI and Google Search. This will create a secrets.ini that will store your API keys.
 
-### Step 5: Upload your documents
+### Step 7: Upload your documents
 
 You can upload your resumes and cover letters in PDF, TXT, or DOCX format. These documents will be used as a database to generate new cover letters.
 
-### Step 6: Generate a cover letter
+### Step 8: Generate a cover letter
 
 You can generate a new cover letter by inputting the company name, job title, and job description into the appropriate fields.
 
@@ -63,19 +94,3 @@ You can also run the tests and linting locally before pushing to the repository.
 ```bash
 bash run_tests.sh
 ```
-
-## Future Updates
-
-Here are some planned enhancements for future updates:
-
-- ✅ **Integrate Streaming Responses:** I'm looking to include stream responses, to alleviate the total wait time for the prediction.
-
-- **Integration with Google SERPer:** I aim to connect the agent with the internet so as to leverage real-time data during the cover letter creation process. This could make the tool even more dynamic and relevant.
-
-- **Secure Key Storage:** Security is crucial when dealing with sensitive data such as API keys. I'm exploring more secure options for storing these keys instead of just saving them in statically in a file, to ensure that the application remains secure.
-
-- ✅ **Simplified Job Input:** To enhance user experience, I'm looking to eventually implement a feature where you only need to provide a link to a job posting. The application would then scrape necessary details such as company name, job title, and job description directly from the posting.
-
-## Contact
-
-If you have any questions or feedback, please feel free to reach out or open an issue. Contributions are also welcome.
